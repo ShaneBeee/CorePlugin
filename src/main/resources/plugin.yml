@@ -1,0 +1,4 @@
+name: CorePlugin
+version: '${version}'
+main: com.shanebeestudios.core.CorePlugin
+api-version: '1.21'

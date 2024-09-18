@@ -1,0 +1,67 @@
+import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
+
+plugins {
+    id("java")
+    id("io.github.goooler.shadow") version "8.1.7"
+    id("io.papermc.paperweight.userdev") version "1.7.2" // the latest version can be found on the Gradle Plugin Portal
+}
+
+// The Minecraft version we're currently building for
+val minecraftVersion = "1.21.1"
+// Where this builds on the server
+val serverLocation = "1-21-1"
+// Version of CorePlugin
+val projectVersion = "1.0.0"
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.MOJANG_PRODUCTION
+
+repositories {
+    mavenCentral()
+
+    // Command Api Snapshots
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+}
+
+dependencies {
+    // Paper
+    paperweight.paperDevBundle("${minecraftVersion}-R0.1-SNAPSHOT")
+
+    // FastBoard
+    implementation("fr.mrmicky:fastboard:2.1.3")
+
+    // Command Api
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.3")
+}
+
+tasks {
+    register("server", Copy::class) {
+        dependsOn("shadowJar")
+        from("build/libs") {
+            include("CorePlugin-*.jar")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/Skript/${serverLocation}/plugins/")
+        }
+
+    }
+    processResources {
+        expand("version" to projectVersion)
+    }
+    compileJava {
+        options.release = 21
+    }
+    javadoc {
+        options.encoding = Charsets.UTF_8.name()
+    }
+    shadowJar {
+        relocate("fr.mrmicky.fastboard", "com.shanebeestudios.core.api.fastboard")
+        relocate("dev.jorel.commandapi", "com.shanebeestudios.core.api.commandapi")
+        archiveFileName = "CorePlugin-${projectVersion}.jar"
+    }
+    jar {
+        dependsOn(shadowJar)
+        archiveFileName.set("CorePlugin.jar")
+    }
+}
