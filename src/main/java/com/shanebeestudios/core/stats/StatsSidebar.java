@@ -24,6 +24,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,6 @@ public class StatsSidebar implements Listener, Stats {
 
     private final CorePlugin plugin;
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
-    private final World overworld = Bukkit.getWorlds().getFirst();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
     private final Map<UUID, FastBoard> fastBoards = new HashMap<>();
     private double gradient = -1;
@@ -108,7 +108,7 @@ public class StatsSidebar implements Listener, Stats {
 
     private void startEntityTimer() {
         this.scheduler.runTaskTimer(this.plugin, () -> {
-            List<Entity> entities = this.overworld.getEntities(); // TODO all worlds?!?!
+            List<Entity> entities = getAllEntities();
             this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> {
                 AtomicInteger entitiesTicking = new AtomicInteger();
                 AtomicInteger mobsAll = new AtomicInteger();
@@ -172,6 +172,12 @@ public class StatsSidebar implements Listener, Stats {
             }, 0);
 
         }, 5, 5);
+    }
+
+    private List<Entity> getAllEntities() {
+        List<Entity> entities = new ArrayList<>();
+        Bukkit.getWorlds().forEach(world -> entities.addAll(world.getEntities()));
+        return entities;
     }
 
     private void startPlayerTimer() {
