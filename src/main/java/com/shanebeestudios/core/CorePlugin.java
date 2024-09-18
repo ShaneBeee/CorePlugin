@@ -3,6 +3,7 @@ package com.shanebeestudios.core;
 import com.shanebeestudios.core.command.DistanceCommand;
 import com.shanebeestudios.core.command.RemoveEntityCommand;
 import com.shanebeestudios.core.command.StatsCommand;
+import com.shanebeestudios.core.command.WorldCommand;
 import com.shanebeestudios.core.listener.ListenerManager;
 import com.shanebeestudios.core.stats.StatsBiomeBar;
 import com.shanebeestudios.core.stats.StatsRamBar;
@@ -65,6 +66,7 @@ public class CorePlugin extends JavaPlugin {
         registerListener(distanceCommand);
         new RemoveEntityCommand();
         new StatsCommand(this);
+        new WorldCommand();
 
     }
 
