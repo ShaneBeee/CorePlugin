@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.stats;
+package com.shanebeestudios.core.plugin.stats;
 
 import org.bukkit.entity.Player;
 

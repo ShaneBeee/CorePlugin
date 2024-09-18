@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.listener;
+package com.shanebeestudios.core.plugin.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;

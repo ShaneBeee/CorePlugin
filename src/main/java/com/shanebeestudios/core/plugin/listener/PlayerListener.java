@@ -1,6 +1,6 @@
-package com.shanebeestudios.core.listener;
+package com.shanebeestudios.core.plugin.listener;
 
-import com.shanebeestudios.core.CorePlugin;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import com.shanebeestudios.core.api.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

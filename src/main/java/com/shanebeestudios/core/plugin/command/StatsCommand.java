@@ -1,7 +1,7 @@
-package com.shanebeestudios.core.command;
+package com.shanebeestudios.core.plugin.command;
 
-import com.shanebeestudios.core.CorePlugin;
-import com.shanebeestudios.core.stats.Stats;
+import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.core.plugin.stats.Stats;
 import com.shanebeestudios.core.api.util.Permissions;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;

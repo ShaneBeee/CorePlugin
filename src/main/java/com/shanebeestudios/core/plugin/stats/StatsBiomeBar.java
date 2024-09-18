@@ -1,6 +1,6 @@
-package com.shanebeestudios.core.stats;
+package com.shanebeestudios.core.plugin.stats;
 
-import com.shanebeestudios.core.CorePlugin;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
 import net.kyori.adventure.text.Component;

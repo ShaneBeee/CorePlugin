@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.command;
+package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.util.Permissions;
 import dev.jorel.commandapi.CommandTree;

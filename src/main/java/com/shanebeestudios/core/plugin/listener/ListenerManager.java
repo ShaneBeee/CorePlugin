@@ -1,6 +1,6 @@
-package com.shanebeestudios.core.listener;
+package com.shanebeestudios.core.plugin.listener;
 
-import com.shanebeestudios.core.CorePlugin;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 

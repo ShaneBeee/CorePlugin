@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.listener;
+package com.shanebeestudios.core.plugin.listener;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

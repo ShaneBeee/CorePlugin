@@ -1,13 +1,13 @@
-package com.shanebeestudios.core;
+package com.shanebeestudios.core.plugin;
 
-import com.shanebeestudios.core.command.DistanceCommand;
-import com.shanebeestudios.core.command.RemoveEntityCommand;
-import com.shanebeestudios.core.command.StatsCommand;
-import com.shanebeestudios.core.command.WorldCommand;
-import com.shanebeestudios.core.listener.ListenerManager;
-import com.shanebeestudios.core.stats.StatsBiomeBar;
-import com.shanebeestudios.core.stats.StatsRamBar;
-import com.shanebeestudios.core.stats.StatsSidebar;
+import com.shanebeestudios.core.plugin.command.DistanceCommand;
+import com.shanebeestudios.core.plugin.command.RemoveEntityCommand;
+import com.shanebeestudios.core.plugin.command.StatsCommand;
+import com.shanebeestudios.core.plugin.command.WorldCommand;
+import com.shanebeestudios.core.plugin.listener.ListenerManager;
+import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
+import com.shanebeestudios.core.plugin.stats.StatsRamBar;
+import com.shanebeestudios.core.plugin.stats.StatsSidebar;
 import com.shanebeestudios.core.api.util.Util;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
