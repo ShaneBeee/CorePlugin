@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.command;
 
 import com.shanebeestudios.core.api.command.CustomArguments;
-import com.shanebeestudios.core.util.Permissions;
+import com.shanebeestudios.core.api.util.Permissions;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import org.bukkit.Location;

@@ -8,7 +8,7 @@ import com.shanebeestudios.core.listener.ListenerManager;
 import com.shanebeestudios.core.stats.StatsBiomeBar;
 import com.shanebeestudios.core.stats.StatsRamBar;
 import com.shanebeestudios.core.stats.StatsSidebar;
-import com.shanebeestudios.core.util.Util;
+import com.shanebeestudios.core.api.util.Util;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;

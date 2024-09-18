@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.command;
 
-import com.shanebeestudios.core.util.Permissions;
-import com.shanebeestudios.core.util.Util;
+import com.shanebeestudios.core.api.util.Permissions;
+import com.shanebeestudios.core.api.util.Util;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;

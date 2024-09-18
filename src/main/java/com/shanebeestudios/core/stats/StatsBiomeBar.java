@@ -1,8 +1,8 @@
 package com.shanebeestudios.core.stats;
 
 import com.shanebeestudios.core.CorePlugin;
-import com.shanebeestudios.core.util.Permissions;
-import com.shanebeestudios.core.util.Util;
+import com.shanebeestudios.core.api.util.Permissions;
+import com.shanebeestudios.core.api.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

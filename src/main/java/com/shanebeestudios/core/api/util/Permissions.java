@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.util;
+package com.shanebeestudios.core.api.util;
 
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;

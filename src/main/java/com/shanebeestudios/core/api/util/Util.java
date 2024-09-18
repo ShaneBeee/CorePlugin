@@ -1,4 +1,4 @@
-package com.shanebeestudios.core.util;
+package com.shanebeestudios.core.api.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
