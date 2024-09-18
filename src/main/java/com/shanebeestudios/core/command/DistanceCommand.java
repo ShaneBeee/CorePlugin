@@ -1,6 +1,5 @@
 package com.shanebeestudios.core.command;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.shanebeestudios.core.util.Permissions;
 import com.shanebeestudios.core.util.Util;
 import dev.jorel.commandapi.CommandTree;
