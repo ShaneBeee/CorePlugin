@@ -29,6 +29,8 @@ public class Permissions {
     public static final Permissions COMMANDS_SIM_DISTANCE_OTHER = registerCommand("distance.simulation.other");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE = registerCommand("distance.fakeview");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE_OTHER = registerCommand("distance.fakeview.other");
+    // Other
+    public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("remove.entity");
 
     // STATS
     public final static Permissions STATS_SIDEBAR = registerStats("sidebar");
