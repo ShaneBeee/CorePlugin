@@ -18,6 +18,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public class CustomArguments {
 
+    private CustomArguments() {
+    }
+
     /**
      * Custom argument using world names rather than keys
      *
@@ -31,6 +34,13 @@ public class CustomArguments {
             ));
     }
 
+    /**
+     * Custom argument using {@link Tag Minecraft Tags}
+     *
+     * @param name     Name of argument
+     * @param registry Registry for type of tag
+     * @return Custom argument for tags
+     */
     public static Argument<Tag<Material>> getTagArgument(String name, String registry) {
         return new CustomArgument<>(new NamespacedKeyArgument(name), info ->
             Bukkit.getTag(registry, info.currentInput(), Material.class))

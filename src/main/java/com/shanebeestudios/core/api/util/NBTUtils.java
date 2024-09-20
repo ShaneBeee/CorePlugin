@@ -19,6 +19,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class NBTUtils {
 
+    private NBTUtils() {
+
+    }
+
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
     /**

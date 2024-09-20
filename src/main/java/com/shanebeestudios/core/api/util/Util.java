@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
  */
 public class Util {
 
+    private Util() {
+    }
+
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final String CONSOLE_PREFIX = "&7[&bCore&7] ";
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f\\d]){6}>");
