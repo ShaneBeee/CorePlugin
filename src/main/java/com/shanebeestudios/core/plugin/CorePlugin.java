@@ -3,6 +3,7 @@ package com.shanebeestudios.core.plugin;
 import com.shanebeestudios.core.plugin.command.DistanceCommand;
 import com.shanebeestudios.core.plugin.command.RemoveEntityCommand;
 import com.shanebeestudios.core.plugin.command.StatsCommand;
+import com.shanebeestudios.core.plugin.command.TagsCommand;
 import com.shanebeestudios.core.plugin.command.WorldCommand;
 import com.shanebeestudios.core.plugin.listener.ListenerManager;
 import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
@@ -66,14 +67,14 @@ public class CorePlugin extends JavaPlugin {
         registerListener(distanceCommand);
         new RemoveEntityCommand();
         new StatsCommand(this);
+        new TagsCommand();
         new WorldCommand();
-
     }
 
     @Override
     public void onDisable() {
-        CommandAPI.onDisable();
         Util.log("Disabling plugin.");
+        CommandAPI.onDisable();
     }
 
     public static CorePlugin getInstance() {
