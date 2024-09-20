@@ -24,6 +24,9 @@ repositories {
 
     // Command Api Snapshots
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+
+    // NBT-API repo
+    maven(("https://repo.codemc.io/repository/maven-public/"))
 }
 
 dependencies {
@@ -35,6 +38,9 @@ dependencies {
 
     // Command Api
     implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.3")
+
+    // NBT-API
+    implementation("de.tr7zw:item-nbt-api:2.13.2")
 }
 
 tasks {
@@ -57,13 +63,15 @@ tasks {
         exclude("com/shanebeestudios/core/plugin")
         (options as StandardJavadocDocletOptions).links(
             "https://jd.papermc.io/paper/1.21.1/",
-            "https://jd.advntr.dev/api/4.17.0/"
+            "https://jd.advntr.dev/api/4.17.0/",
+            "https://tr7zw.github.io/Item-NBT-API/v2-api/"
         )
 
     }
     shadowJar {
         relocate("fr.mrmicky.fastboard", "com.shanebeestudios.core.api.fastboard")
         relocate("dev.jorel.commandapi", "com.shanebeestudios.core.api.commandapi")
+        relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.core.api.nbt")
         archiveFileName = "CorePlugin-${projectVersion}.jar"
     }
     jar {

@@ -21,6 +21,7 @@ public class CommandManager {
 
     private void registerCommands() {
         registerListener(new DistanceCommand());
+        new PrettyNBTCommand();
         new RemoveEntityCommand();
         new StatsCommand(this.plugin);
         new TagsCommand();

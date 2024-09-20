@@ -30,6 +30,7 @@ public class Permissions {
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE = registerCommand("distance.fakeview");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE_OTHER = registerCommand("distance.fakeview.other");
     // Other
+    public static final Permissions COMMANDS_PRETTY_NBT = registerCommand("prettynbt");
     public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("remove.entity");
     public static final Permissions COMMANDS_WORLD = registerCommand("world");
     public static final Permissions COMMANDS_WORLD_OTHER = registerCommand("world.other");

@@ -1,4 +1,4 @@
 name: CorePlugin
 version: '${version}'
-main: com.shanebeestudios.core.CorePlugin
+main: com.shanebeestudios.core.plugin.CorePlugin
 api-version: '1.21'
