@@ -25,6 +25,7 @@ public class CommandManager {
         new HealCommand();
         new PrettyNBTCommand();
         new RemoveEntityCommand();
+        new SetBiomeCommand();
         new StatsCommand(this.plugin);
         new TagsCommand();
         new WorldCommand();
