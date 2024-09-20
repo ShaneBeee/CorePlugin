@@ -54,6 +54,11 @@ tasks {
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()
+        (options as StandardJavadocDocletOptions).links(
+            "https://jd.papermc.io/paper/1.21.1/",
+            "https://jd.advntr.dev/api/4.17.0/"
+        )
+
     }
     shadowJar {
         relocate("fr.mrmicky.fastboard", "com.shanebeestudios.core.api.fastboard")
