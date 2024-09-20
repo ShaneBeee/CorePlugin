@@ -1,15 +1,11 @@
 package com.shanebeestudios.core.plugin;
 
-import com.shanebeestudios.core.plugin.command.DistanceCommand;
-import com.shanebeestudios.core.plugin.command.RemoveEntityCommand;
-import com.shanebeestudios.core.plugin.command.StatsCommand;
-import com.shanebeestudios.core.plugin.command.TagsCommand;
-import com.shanebeestudios.core.plugin.command.WorldCommand;
+import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.core.plugin.command.CommandManager;
 import com.shanebeestudios.core.plugin.listener.ListenerManager;
 import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
 import com.shanebeestudios.core.plugin.stats.StatsRamBar;
 import com.shanebeestudios.core.plugin.stats.StatsSidebar;
-import com.shanebeestudios.core.api.util.Util;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -41,7 +37,7 @@ public class CorePlugin extends JavaPlugin {
         CommandAPI.onEnable();
 
         registerListeners();
-        registerCommands();
+        new CommandManager(this);
 
         long finish = System.currentTimeMillis() - start;
         Util.log("Finished enabling plugin in &b%s&7ms.", finish);
@@ -64,21 +60,13 @@ public class CorePlugin extends JavaPlugin {
         new ListenerManager(this);
     }
 
-    private void registerCommands() {
-        DistanceCommand distanceCommand = new DistanceCommand();
-        registerListener(distanceCommand);
-        new RemoveEntityCommand();
-        new StatsCommand(this);
-        new TagsCommand();
-        new WorldCommand();
-    }
-
     @Override
     public void onDisable() {
         Util.log("Disabling plugin.");
         CommandAPI.onDisable();
     }
 
+    @SuppressWarnings("unused")
     public static CorePlugin getInstance() {
         return instance;
     }
