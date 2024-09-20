@@ -35,6 +35,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        long start = System.currentTimeMillis();
         instance = this;
         Util.log("Enabling plugin.");
         CommandAPI.onEnable();
@@ -42,7 +43,8 @@ public class CorePlugin extends JavaPlugin {
         registerListeners();
         registerCommands();
 
-        Util.log("Finished enabling plugin.");
+        long finish = System.currentTimeMillis() - start;
+        Util.log("Finished enabling plugin in &b%s&7ms.", finish);
     }
 
     private void registerListener(Listener listener) {
