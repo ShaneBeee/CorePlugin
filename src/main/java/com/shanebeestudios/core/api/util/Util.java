@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Simple utility class
+ * General utility class
  */
 public class Util {
 
@@ -39,6 +39,12 @@ public class Util {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
+    /**
+     * Get a {@link MiniMessage mini message} from string
+     *
+     * @param message String to convert to mini message
+     * @return Mini message from string
+     */
     public static Component getMini(String message) {
         return MINI_MESSAGE.deserialize(message);
     }
@@ -53,6 +59,13 @@ public class Util {
         sendTo(CONSOLE, message, objects);
     }
 
+    /**
+     * Send a colored/prefixed message to a command sender
+     *
+     * @param sender  Sender to receive message
+     * @param message Formatted message to send
+     * @param objects Objects to include in format
+     */
     public static void sendTo(CommandSender sender, String message, Object... objects) {
         String format;
         if (objects.length > 0) {
