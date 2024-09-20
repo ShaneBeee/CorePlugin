@@ -21,6 +21,7 @@ public class CommandManager {
 
     private void registerCommands() {
         registerListener(new DistanceCommand());
+        new FixCommand(this.plugin);
         new HealCommand();
         new PrettyNBTCommand();
         new RemoveEntityCommand();
