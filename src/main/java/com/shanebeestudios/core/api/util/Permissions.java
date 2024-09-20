@@ -32,6 +32,7 @@ public class Permissions {
     // Other
     public static final Permissions COMMANDS_PRETTY_NBT = registerCommand("prettynbt");
     public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("remove.entity");
+    public static final Permissions COMMANDS_TAGS = registerCommand("tags");
     public static final Permissions COMMANDS_WORLD = registerCommand("world");
     public static final Permissions COMMANDS_WORLD_OTHER = registerCommand("world.other");
 

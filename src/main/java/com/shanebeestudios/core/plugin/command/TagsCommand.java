@@ -1,6 +1,7 @@
 package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.command.CustomArguments;
+import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
@@ -25,7 +26,7 @@ public class TagsCommand {
     @SuppressWarnings("unchecked")
     private void registerCommand() {
         CommandTree command = new CommandTree("tags")
-            .withPermission("")
+            .withPermission(Permissions.COMMANDS_TAGS.get())
             .then(LiteralArgument.literal("blocktags")
                 .then(new BlockStateArgument("block")
                     .executes(info -> {
