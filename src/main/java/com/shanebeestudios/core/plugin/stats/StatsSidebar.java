@@ -1,8 +1,9 @@
 package com.shanebeestudios.core.plugin.stats;
 
-import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.core.api.util.EntityUtils;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.StringUtils;
@@ -24,7 +25,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class StatsSidebar implements Listener, Stats {
 
     private void startEntityTimer() {
         this.scheduler.runTaskTimer(this.plugin, () -> {
-            List<Entity> entities = getAllEntities();
+            List<Entity> entities = EntityUtils.getAllEntities();
             this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> {
                 AtomicInteger entitiesTicking = new AtomicInteger();
                 AtomicInteger mobsAll = new AtomicInteger();
@@ -172,12 +172,6 @@ public class StatsSidebar implements Listener, Stats {
             }, 0);
 
         }, 5, 5);
-    }
-
-    private List<Entity> getAllEntities() {
-        List<Entity> entities = new ArrayList<>();
-        Bukkit.getWorlds().forEach(world -> entities.addAll(world.getEntities()));
-        return entities;
     }
 
     private void startPlayerTimer() {
