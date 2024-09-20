@@ -8,6 +8,9 @@ import org.bukkit.util.permissions.DefaultPermissions;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Permissions of CorePlugin
+ */
 @SuppressWarnings({"SameParameterValue", "unused"})
 public class Permissions {
 
@@ -59,6 +62,13 @@ public class Permissions {
         DefaultPermissions.registerPermission(perm);
     }
 
+    /**
+     * Get the permissions for a command
+     * <br>Will be prefixed with "core.commands."
+     *
+     * @param permission Command permission to grab
+     * @return Permissions from command
+     */
     public static Permissions getCommandPermissions(String permission) {
         return COMMAND_PERMS.get(permission);
     }
@@ -69,10 +79,21 @@ public class Permissions {
         this.permission = permission;
     }
 
+    /**
+     * Check if a permissible has permission
+     *
+     * @param permissible Permissible to check perm
+     * @return True if has permission
+     */
     public boolean hasPermission(Permissible permissible) {
         return permissible.hasPermission(this.permission);
     }
 
+    /**
+     * Get the string version of a permission
+     *
+     * @return String permission
+     */
     public String get() {
         return this.permission;
     }
