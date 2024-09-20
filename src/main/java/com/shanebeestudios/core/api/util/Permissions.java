@@ -33,6 +33,8 @@ public class Permissions {
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE = registerCommand("distance.fakeview");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE_OTHER = registerCommand("distance.fakeview.other");
     // Other
+    public static final Permissions COMMANDS_HEAL = registerCommand("heal");
+    public static final Permissions COMMANDS_HEAL_OTHER = registerCommand("heal.other");
     public static final Permissions COMMANDS_PRETTY_NBT = registerCommand("prettynbt");
     public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("remove.entity");
     public static final Permissions COMMANDS_TAGS = registerCommand("tags");
