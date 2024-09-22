@@ -33,6 +33,7 @@ public class Permissions {
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE = registerCommand("distance.fakeview");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE_OTHER = registerCommand("distance.fakeview.other");
     // Other
+    public static final Permissions COMMANDS_CLEAR_CHAT = registerCommand("chat.clear");
     public static final Permissions COMMANDS_FIX = registerCommand("fix");
     public static final Permissions COMMANDS_HEAL = registerCommand("heal");
     public static final Permissions COMMANDS_HEAL_OTHER = registerCommand("heal.other");
@@ -56,21 +57,24 @@ public class Permissions {
     public static final Permissions TEAM_LOSER = registerTeam("loser");
     public static final Permissions TEAM_PLAYER = registerTeam("player");
 
+    public static final Permissions CHAT_DELETE = registerCore("chat.delete");
+
     private static Permissions registerCommand(String permission) {
-        Permissions p = new Permissions("core.commands." + permission);
-        registerBukkit(p.get());
+        Permissions p = registerCore("commands." + permission);
         COMMAND_PERMS.put(permission, p);
         return p;
     }
 
     private static Permissions registerStats(String permission) {
-        Permissions p = new Permissions("core.stats." + permission);
-        registerBukkit(p.get());
-        return p;
+        return registerCore("stats." + permission);
     }
 
     private static Permissions registerTeam(String permission) {
-        Permissions p = new Permissions("core.teams." + permission);
+        return registerCore("teams." + permission);
+    }
+
+    private static Permissions registerCore(String permission) {
+        Permissions p = new Permissions("core." + permission);
         registerBukkit(p.get());
         return p;
     }

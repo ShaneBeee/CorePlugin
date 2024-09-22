@@ -8,6 +8,7 @@ public class ListenerManager {
 
     public ListenerManager(CorePlugin plugin) {
         PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new ChatListener(), plugin);
         pluginManager.registerEvents(new EntityListener(), plugin);
         pluginManager.registerEvents(new PlayerListener(plugin), plugin);
         pluginManager.registerEvents(new WorldListener(), plugin);

@@ -20,6 +20,7 @@ public class CommandManager {
     }
 
     private void registerCommands() {
+        new ClearChatCommand();
         registerListener(new DistanceCommand());
         new FixCommand(this.plugin);
         new HealCommand();
