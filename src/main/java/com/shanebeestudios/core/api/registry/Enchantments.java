@@ -29,7 +29,7 @@ public class Enchantments {
     public static Enchantment BEER_CLIMBING;
     public static Enchantment BEER_REACH;
 
-    public static void init() {
+    static void init() {
         for (Datapack enabledPack : Bukkit.getDatapackManager().getEnabledPacks()) {
             if (enabledPack.getName().toLowerCase().contains("beer")) {
                 BEER_ENABLED = true;
