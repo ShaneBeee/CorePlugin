@@ -48,6 +48,14 @@ public class Permissions {
     public final static Permissions STATS_BIOMEBAR = registerStats("biomebar");
     public final static Permissions STATS_RAMBAR = registerStats("rambar");
 
+    // TEAMS
+    public static final Permissions TEAM_OWNER = registerTeam("owner");
+    public static final Permissions TEAM_ADMIN = registerTeam("admin");
+    public static final Permissions TEAM_MOD = registerTeam("mod");
+    public static final Permissions TEAM_VIP = registerTeam("vip");
+    public static final Permissions TEAM_LOSER = registerTeam("loser");
+    public static final Permissions TEAM_PLAYER = registerTeam("player");
+
     private static Permissions registerCommand(String permission) {
         Permissions p = new Permissions("core.commands." + permission);
         registerBukkit(p.get());
@@ -57,6 +65,12 @@ public class Permissions {
 
     private static Permissions registerStats(String permission) {
         Permissions p = new Permissions("core.stats." + permission);
+        registerBukkit(p.get());
+        return p;
+    }
+
+    private static Permissions registerTeam(String permission) {
+        Permissions p = new Permissions("core.teams." + permission);
         registerBukkit(p.get());
         return p;
     }

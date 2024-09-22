@@ -10,6 +10,7 @@ public class Registries {
 
     public static void init() {
         Enchantments.init();
+        Ranks.init();
     }
 
 }

@@ -1,7 +1,8 @@
 package com.shanebeestudios.core.plugin.listener;
 
-import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.core.api.registry.Ranks;
 import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -13,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -25,6 +27,11 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(CorePlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    private void onConnect(PlayerLoginEvent event) {
+        Ranks.joinRank(event.getPlayer());
     }
 
     @EventHandler
