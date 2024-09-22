@@ -24,6 +24,7 @@ public class CommandManager {
         registerListener(new DistanceCommand());
         new FixCommand(this.plugin);
         new HealCommand();
+        registerListener(new NoMonstersCommand());
         new PrettyNBTCommand();
         new RemoveEntityCommand();
         new SetBiomeCommand();
