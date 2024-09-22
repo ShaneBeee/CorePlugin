@@ -1,7 +1,9 @@
 package com.shanebeestudios.core.plugin;
 
+import com.shanebeestudios.core.api.registry.Registries;
 import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.command.CommandManager;
+import com.shanebeestudios.core.plugin.enchantment.EnchantmentManager;
 import com.shanebeestudios.core.plugin.listener.ListenerManager;
 import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
 import com.shanebeestudios.core.plugin.stats.StatsRamBar;
@@ -36,6 +38,7 @@ public class CorePlugin extends JavaPlugin {
         Util.log("Enabling plugin.");
         CommandAPI.onEnable();
 
+        Registries.init();
         registerListeners();
         new CommandManager(this);
 
@@ -57,6 +60,7 @@ public class CorePlugin extends JavaPlugin {
         registerListener(this.statsRambar);
 
         // Register core listeners
+        new EnchantmentManager(this);
         new ListenerManager(this);
     }
 
