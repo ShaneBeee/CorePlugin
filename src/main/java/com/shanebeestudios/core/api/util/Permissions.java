@@ -43,6 +43,7 @@ public class Permissions {
     public static final Permissions COMMANDS_FIX = registerCommand("fix");
     public static final Permissions COMMANDS_HEAL = registerCommand("heal");
     public static final Permissions COMMANDS_HEAL_OTHER = registerCommand("heal.other");
+    public static final Permissions COMMANDS_PATH = registerCommand("path");
     public static final Permissions COMMANDS_PRETTY_NBT = registerCommand("prettynbt");
     public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("removeentity");
     public static final Permissions COMMANDS_SET_BIOME = registerCommand("setbiome");
