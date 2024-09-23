@@ -95,20 +95,17 @@ public class WarpsCommand {
     }
 
     private ArgumentSuggestions<CommandSender> getWarpsSuggestions() {
-        return ArgumentSuggestions.stringsWithTooltipsAsync(info ->
-            CompletableFuture.supplyAsync(() -> getWarps().toArray(new IStringTooltip[0]))
+        return ArgumentSuggestions.stringsWithTooltipsAsync(info -> CompletableFuture.supplyAsync(() -> {
+                List<IStringTooltip> tooltips = new ArrayList<>();
+                this.warps.getAllWarps().forEach((key, warp) ->
+                    tooltips.add(BukkitStringTooltip.ofString(key, prettyLocation(warp))));
+                return tooltips.toArray(new IStringTooltip[0]);
+            })
         );
     }
 
-    private List<IStringTooltip> getWarps() {
-        List<IStringTooltip> tooltips = new ArrayList<>();
-        this.warps.getAllWarps().forEach((key, warp) ->
-            tooltips.add(BukkitStringTooltip.ofString(key, prettyLocation(warp))));
-        return tooltips;
-    }
-
     private String prettyLocation(Warp warp) {
-        Location location = warp.location();
+        Location location = warp.getLocation();
         int x = location.getBlockX();
         int y = location.getBlockY();
         int z = location.getBlockZ();

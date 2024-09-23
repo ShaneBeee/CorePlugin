@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Config for saving {@link Warp warps}
+ */
 public class WarpsConfig {
 
     private final File warpsConfigFile;
@@ -20,6 +23,9 @@ public class WarpsConfig {
 
     private final Map<String, Warp> queueForSaving = new HashMap<>();
 
+    /**
+     * @hidden
+     */
     public WarpsConfig(CorePlugin plugin) {
         this.warpsConfigFile = new File(plugin.getDataFolder(), "warps.yml");
         if (!this.warpsConfigFile.exists()) {
@@ -29,6 +35,11 @@ public class WarpsConfig {
         startSaveTimer(plugin);
     }
 
+    /**
+     * Load all warps
+     *
+     * @return Map of all loaded warps
+     */
     public Map<String, Warp> loadWarps() {
         Map<String, Warp> warpsMap = new HashMap<>();
         ConfigurationSection section = this.warpsConfig.getConfigurationSection("warps");
@@ -64,10 +75,20 @@ public class WarpsConfig {
         this.warpsConfig.set("warps." + key.toLowerCase(), warp);
     }
 
+    /**
+     * Queue a warp for saving
+     *
+     * @param key  Key of warp to save
+     * @param warp Warp to save
+     */
     public void queueForSaving(String key, Warp warp) {
         this.queueForSaving.put(key.toLowerCase(), warp);
     }
 
+    /**
+     * Save all warps
+     * <p>Should only be used when plugin disables</p>
+     */
     public void saveWarps() {
         processQueue();
         saveConfig();
