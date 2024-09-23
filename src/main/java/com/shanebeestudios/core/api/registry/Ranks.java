@@ -25,12 +25,12 @@ public class Ranks {
     static void init() {
     }
 
-    public static Team OWNER = getTeam("a-team", "<grey>[<gradient:#6DEC65:#65DEEC>♛OWNER♚<grey>]", Permissions.TEAM_OWNER);
-    public static Team ADMIN = getTeam("b-team", "<grey>[<gradient:#0FE7F5:#0F85F5>❄ADMIN❄<grey>]", Permissions.TEAM_ADMIN);
-    public static Team MOD = getTeam("c-team", "<grey>[<gradient:#F2F50F:#F51D0F>♧MOD♧<grey>]", Permissions.TEAM_MOD);
-    public static Team VIP = getTeam("d-team", "<grey>[<gradient:#C80FF5:#F50FB6>★VIP★<grey>]", Permissions.TEAM_VIP);
-    public static Team LOSER = getTeam("e-team", "<grey>[<gradient:#EAE30D:#BE0DEA>☁LOSER☁<grey>]", Permissions.TEAM_LOSER);
-    public static Team PLAYER = getTeam("z-team", "<grey>[<gradient:#D91208:#F5740F>♙PLAYER♟<grey>]", Permissions.TEAM_PLAYER);
+    public static Team OWNER = getTeam("a-team", "<grey>[<gradient:#6DEC65:#65DEEC>♛OWNER♚<grey>]", Permissions.RANK_OWNER);
+    public static Team ADMIN = getTeam("b-team", "<grey>[<gradient:#0FE7F5:#0F85F5>❄ADMIN❄<grey>]", Permissions.RANK_ADMIN);
+    public static Team MOD = getTeam("c-team", "<grey>[<gradient:#F2F50F:#F51D0F>♧MOD♧<grey>]", Permissions.RANK_MOD);
+    public static Team VIP = getTeam("d-team", "<grey>[<gradient:#C80FF5:#F50FB6>★VIP★<grey>]", Permissions.RANK_VIP);
+    public static Team LOSER = getTeam("e-team", "<grey>[<gradient:#EAE30D:#BE0DEA>☁LOSER☁<grey>]", Permissions.RANK_LOSER);
+    public static Team PLAYER = getTeam("z-team", "<grey>[<gradient:#D91208:#F5740F>♙PLAYER♟<grey>]", Permissions.RANK_PLAYER);
 
     private static Team getTeam(String name, String prefix, Permissions permission) {
         Team team = SCOREBOARD.getTeam(name);

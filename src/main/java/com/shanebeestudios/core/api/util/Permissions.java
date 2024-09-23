@@ -57,13 +57,13 @@ public class Permissions {
     public final static Permissions STATS_BIOMEBAR = registerStats("biomebar");
     public final static Permissions STATS_RAMBAR = registerStats("rambar");
 
-    // TEAMS
-    public static final Permissions TEAM_OWNER = registerTeam("owner");
-    public static final Permissions TEAM_ADMIN = registerTeam("admin");
-    public static final Permissions TEAM_MOD = registerTeam("mod");
-    public static final Permissions TEAM_VIP = registerTeam("vip");
-    public static final Permissions TEAM_LOSER = registerTeam("loser");
-    public static final Permissions TEAM_PLAYER = registerTeam("player");
+    // RANKS
+    public static final Permissions RANK_OWNER = registerRank("owner");
+    public static final Permissions RANK_ADMIN = registerRank("admin");
+    public static final Permissions RANK_MOD = registerRank("mod");
+    public static final Permissions RANK_VIP = registerRank("vip");
+    public static final Permissions RANK_LOSER = registerRank("loser");
+    public static final Permissions RANK_PLAYER = registerRank("player");
 
     public static final Permissions CHAT_DELETE = registerCore("chat.delete");
 
@@ -77,8 +77,8 @@ public class Permissions {
         return registerCore("stats." + permission);
     }
 
-    private static Permissions registerTeam(String permission) {
-        return registerCore("teams." + permission);
+    private static Permissions registerRank(String permission) {
+        return registerCore("ranks." + permission);
     }
 
     private static Permissions registerCore(String permission) {
