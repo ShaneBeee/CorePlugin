@@ -33,7 +33,10 @@ public class CorePlugin extends JavaPlugin {
     public void onLoad() {
         try {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-                .verboseOutput(false).silentLogs(true).skipReloadDatapacks(true));
+                .setNamespace("core")
+                .verboseOutput(false)
+                .silentLogs(true)
+                .skipReloadDatapacks(true));
         } catch (UnsupportedVersionException ignore) {
         }
     }
