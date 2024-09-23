@@ -1,10 +1,11 @@
 package com.shanebeestudios.core.api.registry;
 
 import com.shanebeestudios.core.api.config.WarpsConfig;
+import com.shanebeestudios.core.api.util.PlayerUtils;
 import com.shanebeestudios.core.plugin.CorePlugin;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,8 +15,8 @@ import java.util.Map;
 public class Warps {
 
     public record Warp(String key, Location location) implements ConfigurationSerializable {
-        public void teleport(Entity entity) {
-            entity.teleportAsync(this.location);
+        public void teleport(Player player) {
+            PlayerUtils.teleportWithoutWarning(player, this.location);
         }
 
         @Override
@@ -62,7 +63,7 @@ public class Warps {
     /**
      * Create a new Warp
      *
-     * @param key     Name of warp
+     * @param key      Name of warp
      * @param location Location of warp
      */
     public void addWarp(String key, Location location) {
