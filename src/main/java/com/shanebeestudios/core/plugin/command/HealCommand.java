@@ -29,7 +29,7 @@ public class HealCommand {
                     players.forEach(this::healPlayer);
                 }));
 
-        command.register("core");
+        command.register();
     }
 
     @SuppressWarnings("DataFlowIssue")

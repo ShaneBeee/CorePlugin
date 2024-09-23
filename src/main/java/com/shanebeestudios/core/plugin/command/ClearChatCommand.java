@@ -17,7 +17,7 @@ public class ClearChatCommand {
                     ChatUtil.clearChat();
                 });
 
-        command.register("core");
+        command.register();
     }
 
 }

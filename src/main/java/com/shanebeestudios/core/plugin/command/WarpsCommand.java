@@ -91,7 +91,7 @@ public class WarpsCommand {
                             }
                         }))));
 
-        command.register("core");
+        command.register();
     }
 
     private ArgumentSuggestions<CommandSender> getWarpsSuggestions() {

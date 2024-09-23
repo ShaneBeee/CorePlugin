@@ -57,7 +57,7 @@ public class PrettyNBTCommand {
                     Util.log("NBT for %s:\n%s", type, pretty);
                 }));
 
-        command.register("core");
+        command.register();
     }
 
     private String getHand(Player player) {

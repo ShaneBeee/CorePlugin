@@ -57,7 +57,7 @@ public class TagsCommand {
                     })));
 
 
-        command.register("core");
+        command.register();
     }
 
     private void printTags(Material material, String registry) {

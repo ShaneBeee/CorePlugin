@@ -71,7 +71,7 @@ public class FixCommand {
 
                     })));
 
-        command.register("core");
+        command.register();
     }
 
     private void registerLoadCommand() {
@@ -84,7 +84,7 @@ public class FixCommand {
                     WorldUtils.copyAndLoadWorld(world);
                 }));
 
-        command.register("core");
+        command.register();
     }
 
     private void fixFalling() {

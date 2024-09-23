@@ -37,7 +37,7 @@ public class WorldCommand {
                         }
                     })));
 
-        command.register("core");
+        command.register();
     }
 
     private void teleportToWorld(Player player, World world) {

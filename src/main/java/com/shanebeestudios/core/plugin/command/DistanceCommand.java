@@ -30,7 +30,7 @@ public class DistanceCommand implements Listener {
         registerDistanceCommand("view");
         registerDistanceCommand("simulation");
         registerDistanceCommand("fakeview");
-        this.commandTree.register("core");
+        this.commandTree.register();
     }
 
     @SuppressWarnings("DataFlowIssue")

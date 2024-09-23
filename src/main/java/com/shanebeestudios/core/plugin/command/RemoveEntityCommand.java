@@ -35,7 +35,7 @@ public class RemoveEntityCommand {
                             return world.isEmpty() || world.get().equals(entity.getWorld());
                         }).forEach(Entity::remove);
                     })));
-        command.register("core");
+        command.register();
     }
 
 }

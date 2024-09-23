@@ -39,7 +39,7 @@ public class NoMonstersCommand implements Listener {
                     }
                 }));
 
-        command.register("core");
+        command.register();
     }
 
     private void deleteMonsters() {

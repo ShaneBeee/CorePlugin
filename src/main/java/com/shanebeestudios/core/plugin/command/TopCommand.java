@@ -37,7 +37,7 @@ public class TopCommand {
                 player.teleport(location);
             });
 
-        command.register("core");
+        command.register();
     }
 
     private boolean isSolid(Location location) {

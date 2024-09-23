@@ -52,7 +52,7 @@ public class SetBiomeCommand {
                             WorldUtils.fillBiome(low, high, biome, replace);
                         }))));
 
-        command.register("core");
+        command.register();
     }
 
 }
