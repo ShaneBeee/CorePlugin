@@ -30,6 +30,7 @@ public class CommandManager {
         new SetBiomeCommand();
         new StatsCommand(this.plugin);
         new TagsCommand();
+        new TopCommand();
         new WarpsCommand(this.plugin);
         new WorldCommand();
     }
