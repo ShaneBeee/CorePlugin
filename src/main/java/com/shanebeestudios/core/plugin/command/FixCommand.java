@@ -2,6 +2,7 @@ package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.command.CustomArguments;
 import com.shanebeestudios.core.api.util.EntityUtils;
+import com.shanebeestudios.core.api.util.McUtils;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.api.util.WorldUtils;
@@ -11,6 +12,9 @@ import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -18,22 +22,17 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("DuplicatedCode")
 public class FixCommand {
 
-    private final CorePlugin plugin;
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
-
+    @SuppressWarnings("unused")
     public FixCommand(CorePlugin plugin) {
-        this.plugin = plugin;
         registerFixCommand();
         registerLoadCommand();
     }
@@ -116,7 +115,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Util.sendTo(player, "Copy of world %s is not loaded.", worldName);
+            Util.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight();
@@ -130,27 +129,31 @@ public class FixCommand {
         int currentChunkX = currentChunk.getX();
         int currentChunkZ = currentChunk.getZ();
 
-        AtomicInteger delay = new AtomicInteger();
-
         radius--;
         for (int cX = -radius; cX <= radius; cX++) {
             for (int cZ = -radius; cZ <= radius; cZ++) {
-                Chunk chunk = world.getChunkAt(currentChunkX + cX, currentChunkZ + cZ);
-                worldCopy.getChunkAtAsync(currentChunkX + cX, currentChunkZ + cZ)
-                    .thenApply(chunkCopy -> {
-                        for (int x = 0; x <= 15; x++) {
-                            int finalX = x;
-                            schedule(() -> {
-                                for (int z = 0; z <= 15; z++) {
-                                    for (int y = min; y < 195; y++) {
-                                        BlockData data = chunkCopy.getBlock(finalX, y, z).getBlockData();
-                                        chunk.getBlock(finalX, y, z).setBlockData(data);
-                                    }
-                                }
-                            }, delay.getAndIncrement());
+                int chunkX = currentChunkX + cX;
+                int chunkZ = currentChunkZ + cZ;
+                Chunk chunk = world.getChunkAt(chunkX, chunkZ);
+                worldCopy.getChunkAtAsyncUrgently(chunkX, chunkZ).thenApply(chunkCopy -> {
+                    LevelChunk levelChunk = McUtils.getLevelChunk(chunk);
+                    for (int x = 0; x <= 15; x++) {
+                        for (int z = 0; z <= 15; z++) {
+                            for (int y = min; y < 195; y++) {
+                                BlockData data = chunkCopy.getBlock(x, y, z).getBlockData();
+                                BlockPos pos = new BlockPos(x + (chunkX << 4), y, z + (chunkZ << 4));
+                                BlockState state = ((CraftBlockData) data).getState();
+                                // Set the block in an NMS chunk for faster results
+                                levelChunk.setBlockState(pos, state, false);
+                            }
                         }
-                        return null;
-                    });
+                    }
+                    // We have to manually update the light after setting blocks
+                    levelChunk.initializeLightSources();
+                    // Now we have to manually update the chunk to the player
+                    world.refreshChunk(chunkX, chunkZ);
+                    return null;
+                });
             }
         }
     }
@@ -160,7 +163,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Util.sendTo(player, "Copy of world %s is not loaded.", worldName);
+            Util.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight() >> 2;
@@ -195,10 +198,6 @@ public class FixCommand {
                     });
             }
         }
-    }
-
-    private void schedule(Runnable task, int delay) {
-        this.scheduler.runTaskLater(this.plugin, task, delay);
     }
 
 }
