@@ -1,16 +1,26 @@
 package com.shanebeestudios.core.api.registry;
 
+import com.shanebeestudios.core.plugin.CorePlugin;
+
 /**
  * Holder of registries
  */
 public class Registries {
 
-    private Registries() {
-    }
+    private final Warps warps;
 
-    public static void init() {
+    public Registries(CorePlugin plugin) {
         Enchantments.init();
         Ranks.init();
+        this.warps = new Warps(plugin);
+    }
+
+    public void disable() {
+        this.warps.getWarpsConfig().saveWarps();
+    }
+
+    public Warps getWarps() {
+        return this.warps;
     }
 
 }

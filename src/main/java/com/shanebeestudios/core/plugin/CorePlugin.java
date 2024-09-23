@@ -1,6 +1,7 @@
 package com.shanebeestudios.core.plugin;
 
 import com.shanebeestudios.core.api.registry.Registries;
+import com.shanebeestudios.core.api.registry.Warps;
 import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.command.CommandManager;
 import com.shanebeestudios.core.plugin.enchantment.EnchantmentManager;
@@ -11,13 +12,19 @@ import com.shanebeestudios.core.plugin.stats.StatsSidebar;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CorePlugin extends JavaPlugin {
 
+    static {
+        ConfigurationSerialization.registerClass(Warps.Warp.class);
+    }
+
     private static CorePlugin instance;
 
+    private Registries registries;
     private StatsSidebar statsSidebar;
     private StatsBiomeBar statsBiomebar;
     private StatsRamBar statsRambar;
@@ -38,7 +45,7 @@ public class CorePlugin extends JavaPlugin {
         Util.log("Enabling plugin.");
         CommandAPI.onEnable();
 
-        Registries.init();
+        this.registries = new Registries(this);
         registerListeners();
         new CommandManager(this);
 
@@ -67,12 +74,17 @@ public class CorePlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         Util.log("Disabling plugin.");
+        this.registries.disable();
         CommandAPI.onDisable();
     }
 
     @SuppressWarnings("unused")
     public static CorePlugin getInstance() {
         return instance;
+    }
+
+    public Registries getRegistries() {
+        return this.registries;
     }
 
     public StatsSidebar getStatsSidebar() {
