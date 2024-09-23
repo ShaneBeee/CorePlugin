@@ -10,8 +10,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -42,6 +44,17 @@ public class McUtils {
     @NotNull
     public static ServerLevel getServerLevel(@NotNull World world) {
         return ((CraftWorld) world).getHandle();
+    }
+
+    /**
+     * Get an instance of LevelChunk from a {@link Chunk Bukkit Chunk}
+     *
+     * @param chunk Bukkit chunk to get LevelChunk from
+     * @return LevelChunk from Chunk
+     */
+    public static LevelChunk getLevelChunk(@NotNull Chunk chunk) {
+        ServerLevel serverLevel = getServerLevel(chunk.getWorld());
+        return serverLevel.getChunk(chunk.getX(), chunk.getZ());
     }
 
     /**
