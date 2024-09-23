@@ -55,7 +55,7 @@ public class StatsCommand {
             );
         });
 
-        statscommand.register();
+        statsCommand.register();
     }
 
     private void runStat(Stats stat, Collection<Player> players, String operation) {
