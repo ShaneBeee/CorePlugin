@@ -2,3 +2,6 @@ name: CorePlugin
 version: '${version}'
 main: com.shanebeestudios.core.plugin.CorePlugin
 api-version: '1.21'
+author: ShaneBee
+website: https://github.com/ShaneBeee/CorePlugin
+description: A bunch of core utilities for the server
