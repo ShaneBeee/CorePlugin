@@ -7,21 +7,24 @@ import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.api.util.WorldUtils;
 import com.shanebeestudios.core.plugin.CorePlugin;
-import dev.jorel.commandapi.BukkitStringTooltip;
 import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.TileState;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.FallingBlock;
@@ -38,37 +41,39 @@ public class FixCommand {
     }
 
     private void registerFixCommand() {
-        ArgumentSuggestions<CommandSender> suggestions = ArgumentSuggestions.stringsWithTooltips(
-            BukkitStringTooltip.ofString("falling", "Removes all falling blocks"),
-            BukkitStringTooltip.ofString("decor", "Removes all dropped items and falling blocks"),
-            BukkitStringTooltip.ofString("nonticking", "Removes all entities in non-ticking chunks"),
-            BukkitStringTooltip.ofString("displays", "Removes all display entities"),
-            BukkitStringTooltip.ofString("chunk", "Regenerate chunks within an optional radius"),
-            BukkitStringTooltip.ofString("biome", "Regenerate biomes within an optional radius")
-        );
-
         CommandTree command = new CommandTree("fix")
             .withPermission(Permissions.COMMANDS_FIX.get())
-            .then(new StringArgument("type")
-                .includeSuggestions(suggestions)
+            .then(new MultiLiteralArgument("type", "falling", "decor", "nonticking", "displays")
+                .executesPlayer(info -> {
+                    String type = info.args().getByClass("type", String.class);
+                    switch (type) {
+                        case "falling" -> fixFalling();
+                        case "decor" -> fixDecor();
+                        case "nonticking" -> fixNonTicking();
+                        case "displays" -> fixDisplays();
+                        case null, default -> {
+                        }
+                    }
+                }))
+            .then(LiteralArgument.literal("biome")
                 .then(new IntegerArgument("radius", 1, 10)
                     .setOptional(true)
                     .executesPlayer(info -> {
                         Player player = info.sender();
-                        String type = info.args().getByClass("type", String.class);
                         Integer radius = info.args().getByClassOrDefault("radius", Integer.class, 1);
-                        switch (type) {
-                            case "falling" -> fixFalling();
-                            case "decor" -> fixDecor();
-                            case "nonticking" -> fixNonTicking();
-                            case "displays" -> fixDisplays();
-                            case "chunk" -> fixChunks(player, radius);
-                            case "biome" -> fixBiomes(player, radius);
-                            case null, default -> {
-                            }
-                        }
-
-                    })));
+                        fixBiomes(player, radius);
+                    })))
+            .then(LiteralArgument.literal("chunk")
+                .then(new IntegerArgument("radius", 1, 10)
+                    .setOptional(true)
+                    .then(new BooleanArgument("includeTile")
+                        .setOptional(true)
+                        .executesPlayer(info -> {
+                            Player player = info.sender();
+                            Integer radius = info.args().getByClassOrDefault("radius", Integer.class, 1);
+                            boolean includeTile = info.args().getByClassOrDefault("includeTile", Boolean.class, false);
+                            fixChunks(player, radius, includeTile);
+                        }))));
 
         command.register();
     }
@@ -110,7 +115,8 @@ public class FixCommand {
         });
     }
 
-    private void fixChunks(Player player, int radius) {
+    @SuppressWarnings("UnstableApiUsage")
+    private void fixChunks(Player player, int radius, boolean includeTile) {
         World world = player.getWorld();
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
@@ -140,15 +146,25 @@ public class FixCommand {
                     for (int x = 0; x <= 15; x++) {
                         for (int z = 0; z <= 15; z++) {
                             for (int y = min; y < 195; y++) {
-                                BlockData data = chunkCopy.getBlock(x, y, z).getBlockData();
+                                Block blockCopy = chunkCopy.getBlock(x, y, z);
+                                BlockData data = blockCopy.getBlockData();
                                 BlockPos pos = new BlockPos(x + (chunkX << 4), y, z + (chunkZ << 4));
                                 BlockState state = ((CraftBlockData) data).getState();
                                 // Set the block in an NMS chunk for faster results
                                 levelChunk.setBlockState(pos, state, false, false);
+
+                                // Copy the TileEntity if one is availabe
+                                if (includeTile && blockCopy.getState() instanceof TileState tileState) {
+                                    Location location = tileState.getLocation();
+                                    location.setWorld(world);
+                                    BlockEntity copy = ((CraftBlockEntityState<?>) tileState.copy(location)).getTileEntity();
+                                    levelChunk.setBlockEntity(copy);
+                                }
                             }
                         }
                     }
                     // We have to manually update the light after setting blocks
+                    // (not sure if this actually works, the method appears empty)
                     levelChunk.initializeLightSources();
                     // Now we have to manually update the chunk to the player
                     world.refreshChunk(chunkX, chunkZ);
