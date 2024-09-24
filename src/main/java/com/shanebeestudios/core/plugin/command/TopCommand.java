@@ -1,6 +1,7 @@
 package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.util.Permissions;
+import com.shanebeestudios.core.api.util.PlayerUtils;
 import dev.jorel.commandapi.CommandTree;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
@@ -34,7 +35,7 @@ public class TopCommand {
                         location = location.add(0,1,0);
                     }
                 }
-                player.teleport(location);
+                PlayerUtils.teleportWithoutWarning(player, location);
             });
 
         command.register();
