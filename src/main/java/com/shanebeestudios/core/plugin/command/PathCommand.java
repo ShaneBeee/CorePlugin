@@ -21,7 +21,6 @@ import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -94,17 +93,12 @@ public class PathCommand implements Listener {
     }
 
     private void drawPath(Mob mob) {
-        var ref = new Object() {
-            int id = -1;
-        };
-        BukkitTask bukkitTask = this.scheduler.runTaskTimer(this.plugin, () -> {
+        this.scheduler.runTaskTimer(this.plugin, task -> {
             Location from = null;
             Pathfinder pathfinder = mob.getPathfinder();
             PathResult currentPath = pathfinder.getCurrentPath();
             if (!mob.isValid() || !this.types.contains(mob.getType()) || currentPath == null || currentPath.getPoints().isEmpty()) {
-                if (ref.id > 0) {
-                    this.scheduler.cancelTask(ref.id);
-                }
+                task.cancel();
                 return;
             }
             int size = (int) Math.floor(150d / currentPath.getPoints().size());
@@ -120,7 +114,6 @@ public class PathCommand implements Listener {
                 from = point;
             }
         }, 5, 5);
-        ref.id = bukkitTask.getTaskId();
     }
 
     @EventHandler
