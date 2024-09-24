@@ -20,7 +20,7 @@ public class RemoveEntityCommand {
     @SuppressWarnings("DataFlowIssue")
     private void registerCommand() {
         CommandTree command = new CommandTree("removeentity")
-            .withShortDescription("Remove entities with an option to only remove from a specific world")
+            .withShortDescription("Remove entities with an option to only remove from a specific world.")
             .withPermission(Permissions.COMMANDS_REMOVE_ENTITY.get())
             .then(new EntitySelectorArgument.ManyEntities("entities")
                 .then(new WorldArgument("world")

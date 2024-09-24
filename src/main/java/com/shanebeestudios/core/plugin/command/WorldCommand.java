@@ -19,7 +19,7 @@ public class WorldCommand {
     @SuppressWarnings({"DataFlowIssue", "unchecked"})
     private void registerCommand() {
         CommandTree command = new CommandTree("world")
-            .withShortDescription("Teleport to the spawn location of a world")
+            .withShortDescription("Teleport to the spawn location of a world.")
             .withPermission(Permissions.COMMANDS_WORLD.get())
             .then(CustomArguments.getWorldArgument("world")
                 .then(new EntitySelectorArgument.ManyPlayers("players")

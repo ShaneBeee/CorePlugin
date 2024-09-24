@@ -42,6 +42,7 @@ public class FixCommand {
 
     private void registerFixCommand() {
         CommandTree command = new CommandTree("fix")
+            .withShortDescription("Fix different objects on the server.")
             .withPermission(Permissions.COMMANDS_FIX.get())
             .then(new MultiLiteralArgument("type", "falling", "decor", "nonticking", "displays")
                 .executesPlayer(info -> {

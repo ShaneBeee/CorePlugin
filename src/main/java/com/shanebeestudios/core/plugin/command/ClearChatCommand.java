@@ -12,6 +12,7 @@ public class ClearChatCommand {
 
     private void registerCommand() {
         CommandTree command = new CommandTree("clearchat")
+            .withShortDescription("Clears the chat.")
             .withPermission(Permissions.COMMANDS_CLEAR_CHAT.get())
                 .executes((sender, args) -> {
                     ChatUtil.clearChat();

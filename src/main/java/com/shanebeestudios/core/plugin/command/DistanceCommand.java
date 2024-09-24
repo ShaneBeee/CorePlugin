@@ -27,6 +27,7 @@ public class DistanceCommand implements Listener {
 
     public DistanceCommand() {
         this.commandTree = new CommandTree("distance");
+        this.commandTree.withShortDescription("Change different distances for a player.");
         registerDistanceCommand("view");
         registerDistanceCommand("simulation");
         registerDistanceCommand("fakeview");

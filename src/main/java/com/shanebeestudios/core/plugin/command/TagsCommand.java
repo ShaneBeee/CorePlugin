@@ -26,6 +26,7 @@ public class TagsCommand {
     @SuppressWarnings("unchecked")
     private void registerCommand() {
         CommandTree command = new CommandTree("tags")
+            .withShortDescription("See different tags for items/blocks and values of tags.")
             .withPermission(Permissions.COMMANDS_TAGS.get())
             .then(LiteralArgument.literal("blocktags")
                 .then(new BlockStateArgument("block")

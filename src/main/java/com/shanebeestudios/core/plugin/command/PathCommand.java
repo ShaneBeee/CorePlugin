@@ -39,6 +39,7 @@ public class PathCommand implements Listener {
 
     private void registerCommand() {
         CommandTree command = new CommandTree("path")
+            .withShortDescription("Visualize entity pathfinding.")
             .then(LiteralArgument.literal("list")
                 .executes((sender, args) -> {
                     if (this.types.isEmpty()) {

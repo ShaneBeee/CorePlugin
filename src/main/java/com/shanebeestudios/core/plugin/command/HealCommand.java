@@ -17,6 +17,7 @@ public class HealCommand {
     @SuppressWarnings("unchecked")
     private void registerCommand() {
         CommandTree command = new CommandTree("heal")
+            .withShortDescription("Heal and feed a player.")
             .withPermission(Permissions.COMMANDS_HEAL.get())
             .executesPlayer(info -> {
                 healPlayer(info.sender());

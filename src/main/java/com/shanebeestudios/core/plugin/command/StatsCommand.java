@@ -27,6 +27,7 @@ public class StatsCommand {
         statsMap.put("all", null);
 
         CommandTree statsCommand = new CommandTree("stats");
+        statsCommand.withShortDescription("See different stats about the server");
         statsCommand.executesPlayer(info -> {
             List<Player> sender = List.of(info.sender());
             runStat(null, sender, "toggle");

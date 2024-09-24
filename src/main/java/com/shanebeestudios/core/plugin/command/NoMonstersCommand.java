@@ -23,6 +23,7 @@ public class NoMonstersCommand implements Listener {
     @SuppressWarnings("DataFlowIssue")
     private void registerCommand() {
         CommandTree command = new CommandTree("nomonsters")
+            .withShortDescription("Disable monster spawning.")
             .executes((sender, args) -> {
                 String enabled = this.noMonsters ? "&aEnabled" : "&cDisabled";
                 Util.sendTo(sender, "NoMonsters is currently %s", enabled);

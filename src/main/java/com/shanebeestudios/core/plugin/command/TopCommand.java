@@ -18,6 +18,7 @@ public class TopCommand {
 
     private void registerCommand() {
         CommandTree command = new CommandTree("top")
+            .withShortDescription("Teleport to the highest block at the player's location.")
             .withPermission(Permissions.COMMANDS_TOP.get())
             .executesPlayer(info -> {
                 Player player = info.sender();

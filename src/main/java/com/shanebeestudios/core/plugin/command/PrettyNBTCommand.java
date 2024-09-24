@@ -34,6 +34,7 @@ public class PrettyNBTCommand {
             BukkitStringTooltip.ofString("player", "NBT of player"));
 
         CommandTree command = new CommandTree("pretty")
+            .withShortDescription("See nbt of different objects.")
             .withPermission(Permissions.COMMANDS_PRETTY_NBT.get())
             .then(new StringArgument("type")
                 .includeSuggestions(suggestions)

@@ -33,6 +33,7 @@ public class WarpsCommand {
     @SuppressWarnings({"unchecked", "DataFlowIssue"})
     private void registerCommand() {
         CommandTree command = new CommandTree("warps")
+            .withShortDescription("Warp to different points in the world.")
             .withPermission(Permissions.COMMANDS_WARPS.get())
             .then(LiteralArgument.literal("set")
                 .withPermission(Permissions.COMMANDS_WARPS_SET.get())
