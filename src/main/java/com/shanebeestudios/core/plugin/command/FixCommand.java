@@ -144,7 +144,7 @@ public class FixCommand {
                                 BlockPos pos = new BlockPos(x + (chunkX << 4), y, z + (chunkZ << 4));
                                 BlockState state = ((CraftBlockData) data).getState();
                                 // Set the block in an NMS chunk for faster results
-                                levelChunk.setBlockState(pos, state, false);
+                                levelChunk.setBlockState(pos, state, false, false);
                             }
                         }
                     }
