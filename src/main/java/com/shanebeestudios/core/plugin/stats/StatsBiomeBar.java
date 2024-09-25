@@ -1,10 +1,12 @@
 package com.shanebeestudios.core.plugin.stats;
 
-import com.shanebeestudios.core.plugin.CorePlugin;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.core.plugin.CorePlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.UnsafeValues;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings("deprecation")
 public class StatsBiomeBar implements Listener, Stats {
 
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
+    private final UnsafeValues unsafeValues = Bukkit.getUnsafe();
     private final List<UUID> playerList = new ArrayList<>();
 
     public StatsBiomeBar(CorePlugin plugin) {
@@ -30,13 +34,13 @@ public class StatsBiomeBar implements Listener, Stats {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) return;
 
-            String key = player.getLocation().getBlock().getBiome().getKey().toString();
-            Component action = Util.getMini("<grey>Biome: " + formatBiome(key));
+            Component action = Util.getMini("<grey>Biome: " + getFormattedBiome(player.getLocation()));
             player.sendActionBar(action);
         }), 5, 5);
     }
 
-    private String formatBiome(String key) {
+    private String getFormattedBiome(Location location) {
+        String key = this.unsafeValues.getBiomeKey(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()).toString();
         key = key.replace("minecraft:", "<aqua>minecraft<reset>:<yellow>");
         key = key.replace("wythers:", "<green>wythers<reset>:<yellow>");
         key = key.replace("skbee:", "<#FFA533>skbee<reset>:<yellow>");
