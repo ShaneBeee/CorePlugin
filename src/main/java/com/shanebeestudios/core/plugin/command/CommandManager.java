@@ -28,6 +28,7 @@ public class CommandManager {
         registerListener(new PathCommand(this.plugin));
         new PrettyNBTCommand();
         new RemoveEntityCommand();
+        new RepairCommand();
         new SetBiomeCommand();
         new StatsCommand(this.plugin);
         new TagsCommand();

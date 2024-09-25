@@ -46,6 +46,7 @@ public class Permissions {
     public static final Permissions COMMANDS_PATH = registerCommand("path");
     public static final Permissions COMMANDS_PRETTY_NBT = registerCommand("prettynbt");
     public static final Permissions COMMANDS_REMOVE_ENTITY = registerCommand("removeentity");
+    public static final Permissions COMMANDS_REPAIR = registerCommand("repair");
     public static final Permissions COMMANDS_SET_BIOME = registerCommand("setbiome");
     public static final Permissions COMMANDS_TAGS = registerCommand("tags");
     public static final Permissions COMMANDS_TOP = registerCommand("top");
