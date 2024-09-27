@@ -30,6 +30,7 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 @SuppressWarnings("DuplicatedCode")
 public class FixCommand {
@@ -106,7 +107,7 @@ public class FixCommand {
 
     private void fixNonTicking() {
         EntityUtils.getAllEntities().forEach(entity -> {
-            if (!entity.isTicking()) entity.remove();
+            if (!entity.isTicking() && !(entity instanceof Villager)) entity.remove();
         });
     }
 
