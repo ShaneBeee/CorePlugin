@@ -27,6 +27,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Enemy;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -45,14 +46,15 @@ public class FixCommand {
         CommandTree command = new CommandTree("fix")
             .withShortDescription("Fix different objects on the server.")
             .withPermission(Permissions.COMMANDS_FIX.get())
-            .then(new MultiLiteralArgument("type", "falling", "decor", "nonticking", "displays")
+            .then(new MultiLiteralArgument("type", "falling", "decor", "nonticking", "display", "enemy")
                 .executesPlayer(info -> {
                     String type = info.args().getByClass("type", String.class);
                     switch (type) {
                         case "falling" -> fixFalling();
                         case "decor" -> fixDecor();
                         case "nonticking" -> fixNonTicking();
-                        case "displays" -> fixDisplays();
+                        case "display" -> fixDisplays();
+                        case "enemy" -> fixEnemy();
                         case null, default -> {
                         }
                     }
@@ -114,6 +116,12 @@ public class FixCommand {
     private void fixDisplays() {
         EntityUtils.getAllEntities().forEach(entity -> {
             if (entity instanceof Display) entity.remove();
+        });
+    }
+
+    private void fixEnemy() {
+        EntityUtils.getAllEntities().forEach(entity -> {
+            if (entity instanceof Enemy) entity.remove();
         });
     }
 
