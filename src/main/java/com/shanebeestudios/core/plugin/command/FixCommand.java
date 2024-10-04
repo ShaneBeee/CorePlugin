@@ -150,6 +150,9 @@ public class FixCommand {
             for (int cZ = -radius; cZ <= radius; cZ++) {
                 int chunkX = currentChunkX + cX;
                 int chunkZ = currentChunkZ + cZ;
+                // Don't load chunks
+                if (!world.isChunkLoaded(chunkX, chunkZ)) continue;
+
                 Chunk chunk = world.getChunkAt(chunkX, chunkZ);
                 worldCopy.getChunkAtAsyncUrgently(chunkX, chunkZ).thenApply(chunkCopy -> {
                     LevelChunk levelChunk = McUtils.getLevelChunk(chunk);
@@ -206,8 +209,13 @@ public class FixCommand {
         radius--;
         for (int cX = -radius; cX <= radius; cX++) {
             for (int cZ = -radius; cZ <= radius; cZ++) {
-                Chunk chunk = world.getChunkAt(currentChunkX + cX, currentChunkZ + cZ);
-                worldCopy.getChunkAtAsync(currentChunkX + cX, currentChunkZ + cZ)
+                int chunkX = currentChunkX + cX;
+                int chunkZ = currentChunkZ + cZ;
+                // Don't load chunks
+                if (!world.isChunkLoaded(chunkX, chunkZ)) continue;
+
+                Chunk chunk = world.getChunkAt(chunkX, chunkZ);
+                worldCopy.getChunkAtAsync(chunkX, chunkZ)
                     .thenApply(chunkCopy -> {
                         for (int x = 0; x < 4; x++) {
                             for (int z = 0; z < 4; z++) {
@@ -216,10 +224,8 @@ public class FixCommand {
                                     chunk.getBlock(x << 2, y << 2, z << 2).setBiome(biome);
                                 }
                             }
-                            if (x == 3) {
-                                world.refreshChunk(chunk.getX(), chunk.getZ());
-                            }
                         }
+                        world.refreshChunk(chunkX, chunkZ);
                         return null;
                     });
             }
