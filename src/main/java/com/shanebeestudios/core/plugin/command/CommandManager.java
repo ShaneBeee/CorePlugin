@@ -33,6 +33,7 @@ public class CommandManager {
         new StatsCommand(this.plugin);
         new TagsCommand();
         new TopCommand();
+        new TreeCommand();
         new WarpsCommand(this.plugin);
         new WorldCommand();
     }

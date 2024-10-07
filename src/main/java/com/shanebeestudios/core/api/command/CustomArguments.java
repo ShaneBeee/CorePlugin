@@ -8,9 +8,12 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.TreeType;
 import org.bukkit.World;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -49,6 +52,19 @@ public class CustomArguments {
                     ((Collection<Tag<Material>>) Bukkit.getTags(registry, Material.class))
                         .stream().map(tag -> tag.getKey().toString()).toList())
             ));
+    }
+
+    /**
+     * Custom argument using {@link TreeType Bukkit TreeType}
+     *
+     * @param name Name of argument
+     * @return Custom argument for TreeType
+     */
+    public static Argument<TreeType> getTreeTypeArgument(String name) {
+        return new CustomArgument<>(new StringArgument(name), info ->
+            TreeType.valueOf(info.input().toUpperCase(Locale.ROOT)))
+            .includeSuggestions(ArgumentSuggestions.stringCollectionAsync(info ->
+                CompletableFuture.supplyAsync(() -> Arrays.stream(TreeType.values()).map(treeType -> treeType.name().toLowerCase(Locale.ROOT)).toList())));
     }
 
 }
