@@ -24,6 +24,7 @@ public class CommandManager {
         registerListener(new DistanceCommand());
         new FixCommand(this.plugin);
         new HealCommand();
+        new IgniteCommand();
         registerListener(new NoMonstersCommand());
         registerListener(new PathCommand(this.plugin));
         new PrettyNBTCommand();
