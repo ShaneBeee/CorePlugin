@@ -1,6 +1,7 @@
 package com.shanebeestudios.core.api.util;
 
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.McUtils;
 import net.kyori.adventure.util.TriState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -34,7 +35,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class WorldUtils {
 
-    private static final Registry<Biome> BIOME_REGISTRY = McUtils.getRegistry(Registries.BIOME);
+    private static final Registry<Biome> BIOME_REGISTRY = McUtils.getRegistry(Registries.BIOME, false);
 
     private WorldUtils() {
     }

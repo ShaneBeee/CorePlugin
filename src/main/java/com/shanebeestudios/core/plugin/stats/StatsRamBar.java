@@ -1,8 +1,8 @@
 package com.shanebeestudios.core.plugin.stats;
 
-import com.shanebeestudios.core.plugin.CorePlugin;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -31,7 +31,7 @@ public class StatsRamBar implements Listener, Stats {
             long free = runtime.freeMemory() / 1024 / 1024;
             double used = Math.floor(max - free);
             String title = String.format("&7Ram: &b%s&7mb / &b%s&7mb", used, max);
-            this.bossbar.setTitle(Util.getColString(title));
+            this.bossbar.setTitle(Utils.getColString(title));
             double progress = (used / max);
             this.bossbar.setProgress(progress);
             if (progress > 0.9) this.bossbar.setColor(BarColor.RED);

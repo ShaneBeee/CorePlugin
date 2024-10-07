@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -41,7 +41,7 @@ public class DistanceCommand implements Listener {
                 .withPermission(Permissions.getCommandPermissions("distance." + type).get())
                 .executesPlayer((player, args) -> {
                     int distance = getDistance(player, type);
-                    Component mini = Util.getMini("<grey>[<aqua>Distance<grey>] <#FF8033>Your " + type + " distance is <aqua>" + distance);
+                    Component mini = Utils.getMini("<grey>[<aqua>Distance<grey>] <#FF8033>Your " + type + " distance is <aqua>" + distance);
                     player.sendMessage(mini);
                 })
                 .then(new IntegerArgument("distance", 2, 32)

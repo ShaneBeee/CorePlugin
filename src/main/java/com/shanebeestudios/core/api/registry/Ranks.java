@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.api.registry;
 
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -35,7 +35,7 @@ public class Ranks {
     private static Team getTeam(String name, String prefix, Permissions permission) {
         Team team = SCOREBOARD.getTeam(name);
         if (team == null) team = SCOREBOARD.registerNewTeam(name);
-        team.prefix(Util.getMini(prefix + " "));
+        team.prefix(Utils.getMini(prefix + " "));
         TEAM_BY_PERM.put(permission, team);
         return team;
     }

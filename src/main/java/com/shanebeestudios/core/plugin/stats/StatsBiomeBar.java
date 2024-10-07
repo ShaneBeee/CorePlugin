@@ -1,8 +1,8 @@
 package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,7 +34,7 @@ public class StatsBiomeBar implements Listener, Stats {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) return;
 
-            Component action = Util.getMini("<grey>Biome: " + getFormattedBiome(player.getLocation()));
+            Component action = Utils.getMini("<grey>Biome: " + getFormattedBiome(player.getLocation()));
             player.sendActionBar(action);
         }), 5, 5);
     }

@@ -2,13 +2,13 @@ package com.shanebeestudios.core.plugin;
 
 import com.shanebeestudios.core.api.registry.Registries;
 import com.shanebeestudios.core.api.registry.Warps;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.command.CommandManager;
 import com.shanebeestudios.core.plugin.enchantment.EnchantmentManager;
 import com.shanebeestudios.core.plugin.listener.ListenerManager;
 import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
 import com.shanebeestudios.core.plugin.stats.StatsRamBar;
 import com.shanebeestudios.core.plugin.stats.StatsSidebar;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -31,6 +31,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        Utils.setPrefix("&7[&bCore&7] ");
         try {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .setNamespace("core")
@@ -45,7 +46,7 @@ public class CorePlugin extends JavaPlugin {
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
-        Util.log("Enabling plugin.");
+        Utils.log("Enabling plugin.");
         CommandAPI.onEnable();
 
         this.registries = new Registries(this);
@@ -53,7 +54,7 @@ public class CorePlugin extends JavaPlugin {
         new CommandManager(this);
 
         long finish = System.currentTimeMillis() - start;
-        Util.log("Finished enabling plugin in &b%s&7ms.", finish);
+        Utils.log("Finished enabling plugin in &b%s&7ms.", finish);
     }
 
     private void registerListener(Listener listener) {
@@ -76,7 +77,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Util.log("Disabling plugin.");
+        Utils.log("Disabling plugin.");
         this.registries.disable();
         CommandAPI.onDisable();
     }

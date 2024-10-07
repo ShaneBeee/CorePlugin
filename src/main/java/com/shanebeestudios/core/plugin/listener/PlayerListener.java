@@ -1,8 +1,8 @@
 package com.shanebeestudios.core.plugin.listener;
 
 import com.shanebeestudios.core.api.registry.Ranks;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Component mini = Util.getMini("<gray>[<#1BF987>+<gray>] <#1BF9E8>" + player.getName());
+        Component mini = Utils.getMini("<gray>[<#1BF987>+<gray>] <#1BF9E8>" + player.getName());
         event.joinMessage(mini);
         closeTerrainLoadingScreen(player, false);
         if (player.isOp()) player.setGameMode(GameMode.CREATIVE);
@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Component mini = Util.getMini("<gray>[<#F94D1B>-<gray>] <#1BF9E8>" + player.getName());
+        Component mini = Utils.getMini("<gray>[<#F94D1B>-<gray>] <#1BF9E8>" + player.getName());
         event.quitMessage(mini);
     }
 

@@ -3,8 +3,8 @@ package com.shanebeestudios.core.plugin.command;
 import com.destroystokyo.paper.entity.Pathfinder;
 import com.destroystokyo.paper.entity.Pathfinder.PathResult;
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -43,16 +43,16 @@ public class PathCommand implements Listener {
             .then(LiteralArgument.literal("list")
                 .executes((sender, args) -> {
                     if (this.types.isEmpty()) {
-                        Util.sendTo(sender, "&cCurrently not pathfinding");
+                        Utils.sendTo(sender, "&cCurrently not pathfinding");
                         return;
                     }
                     String entityTypes = StringUtils.join(this.types.stream().map(entityType -> entityType.getKey().getKey()).sorted().toArray(), "&r, &b");
-                    Util.sendTo(sender, "&eCurrently pathfinding for &b%s", entityTypes);
+                    Utils.sendTo(sender, "&eCurrently pathfinding for &b%s", entityTypes);
                 }))
             .then(LiteralArgument.literal("disable")
                 .executes((sender, args) -> {
                     this.types.clear();
-                    Util.sendTo(sender, "&cDisabled pathfinding");
+                    Utils.sendTo(sender, "&cDisabled pathfinding");
                 }))
             .then(LiteralArgument.literal("enable")
                 .then(new EntityTypeArgument("entityType")
@@ -62,17 +62,17 @@ public class PathCommand implements Listener {
 
                         String key = type.getKey().getKey();
                         if (this.types.contains(type)) {
-                            Util.sendTo(sender, "&6Already pathfinding for &b%s", key);
+                            Utils.sendTo(sender, "&6Already pathfinding for &b%s", key);
                             return;
                         }
                         Class<? extends Entity> entityClass = type.getEntityClass();
                         if (entityClass == null || !Mob.class.isAssignableFrom(entityClass)) {
                             // Only mobs can pathfind
-                            Util.sendTo(sender, "&cInvalid mob type &b%s", key);
+                            Utils.sendTo(sender, "&cInvalid mob type &b%s", key);
                             return;
                         }
                         this.types.add(type);
-                        Util.sendTo(sender, "&aEnabled pathfinding for &b%s", key);
+                        Utils.sendTo(sender, "&aEnabled pathfinding for &b%s", key);
                     })));
 
         command.register();

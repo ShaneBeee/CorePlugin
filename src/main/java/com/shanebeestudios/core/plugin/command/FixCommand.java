@@ -2,11 +2,11 @@ package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.command.CustomArguments;
 import com.shanebeestudios.core.api.util.EntityUtils;
-import com.shanebeestudios.core.api.util.McUtils;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.api.util.WorldUtils;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.McUtils;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -131,7 +131,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Util.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
+            Utils.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight();
@@ -192,7 +192,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Util.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
+            Utils.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight() >> 2;

@@ -27,6 +27,9 @@ repositories {
 
     // NBT-API repo
     maven(("https://repo.codemc.io/repository/maven-public/"))
+
+    // JitPack repo
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -41,6 +44,9 @@ dependencies {
 
     // NBT-API
     implementation("de.tr7zw:item-nbt-api:2.13.2")
+
+    // CoreAPI
+    implementation("com.github.shanebeestudios:coreapi:master-SNAPSHOT")
 }
 
 tasks {

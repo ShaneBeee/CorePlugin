@@ -1,6 +1,6 @@
 package com.shanebeestudios.core.plugin.command;
 
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import org.bukkit.Bukkit;
@@ -26,17 +26,17 @@ public class NoMonstersCommand implements Listener {
             .withShortDescription("Disable monster spawning.")
             .executes((sender, args) -> {
                 String enabled = this.noMonsters ? "&aEnabled" : "&cDisabled";
-                Util.sendTo(sender, "NoMonsters is currently %s", enabled);
+                Utils.sendTo(sender, "NoMonsters is currently %s", enabled);
             })
             .then(new MultiLiteralArgument("type", "enable", "disable")
                 .executes((sender, args) -> {
                     if (args.getByClass("type", String.class).equalsIgnoreCase("enable")) {
                         this.noMonsters = true;
-                        Util.sendTo(sender, "NoMonsters is now &aEnabled &7monsters will no longer spawn");
+                        Utils.sendTo(sender, "NoMonsters is now &aEnabled &7monsters will no longer spawn");
                         deleteMonsters();
                     } else {
                         this.noMonsters = false;
-                        Util.sendTo(sender, "NoMonsters is now &cDisabled &7monsters will now spawn");
+                        Utils.sendTo(sender, "NoMonsters is now &cDisabled &7monsters will now spawn");
                     }
                 }));
 

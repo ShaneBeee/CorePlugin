@@ -3,7 +3,7 @@ package com.shanebeestudios.core.plugin.listener;
 import com.shanebeestudios.core.api.registry.Ranks;
 import com.shanebeestudios.core.api.util.ChatUtil;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
@@ -29,8 +29,8 @@ public class ChatListener implements Listener {
         // Create click event to delete message
         SignedMessage signedMessage = event.signedMessage();
         ChatUtil.logMessage(signedMessage);
-        components[0] = Util.getMini("<grey>[<red>X<grey>]")
-            .hoverEvent(Util.getMini("Click to delete message."))
+        components[0] = Utils.getMini("<grey>[<red>X<grey>]")
+            .hoverEvent(Utils.getMini("Click to delete message."))
             .clickEvent(ClickEvent.callback(audience -> {
                 if (audience instanceof Player clicker && Permissions.CHAT_DELETE.hasPermission(clicker)) {
                     Bukkit.getOnlinePlayers().forEach(player -> player.deleteMessage(signedMessage));
@@ -40,7 +40,7 @@ public class ChatListener implements Listener {
         // Format info before message
         Player player = event.getPlayer();
         components[1] = getTeamPrefix(player);
-        components[2] = Util.getMini("<aqua>").append(player.displayName()).append(Util.getMini(" <grey>» <reset>"));
+        components[2] = Utils.getMini("<aqua>").append(player.displayName()).append(Utils.getMini(" <grey>» <reset>"));
         components[3] = event.message();
         Component format = Component.join(JoinConfiguration.noSeparators(), components);
 

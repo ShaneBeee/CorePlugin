@@ -2,7 +2,7 @@ package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.util.NBTUtils;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import de.tr7zw.changeme.nbtapi.NBTBlock;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTEntity;
@@ -51,11 +51,11 @@ public class PrettyNBTCommand {
                         default -> null;
                     };
                     if (pretty == null) {
-                        Util.sendTo(player, "NBT for %s is unavailable.", type);
+                        Utils.sendTo(player, "NBT for %s is unavailable.", type);
                         return;
                     }
-                    Util.sendTo(player, "NBT for %s sent to console.", type);
-                    Util.log("NBT for %s:\n%s", type, pretty);
+                    Utils.sendTo(player, "NBT for %s sent to console.", type);
+                    Utils.log("NBT for %s:\n%s", type, pretty);
                 }));
 
         command.register();

@@ -2,8 +2,8 @@ package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.EntityUtils;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.StringUtils;
@@ -71,13 +71,13 @@ public class StatsSidebar implements Listener, Stats {
             if (this.gradient > 1) this.gradient = -1;
 
             // Title
-            this.title = Util.getMini("<grey>---[<gradient:#F008F4:#08F4B4:" + this.gradient + ">SERVER STATS<grey>]---");
+            this.title = Utils.getMini("<grey>---[<gradient:#F008F4:#08F4B4:" + this.gradient + ">SERVER STATS<grey>]---");
 
             // MSPT
             double averageTickTime = Bukkit.getAverageTickTime();
             double grad = Math.min(averageTickTime, 40) / 40;
             String avg = String.format("%.2f", averageTickTime);
-            this.lines[4] = Util.getMini("<grey>- <transition:#17FA04:#F3FA04:#FA7804:#FA1704:" + grad + ">" + avg + "<grey>ms");
+            this.lines[4] = Utils.getMini("<grey>- <transition:#17FA04:#F3FA04:#FA7804:#FA1704:" + grad + ">" + avg + "<grey>ms");
 
             // TPS
             double[] tps = Bukkit.getTPS();
@@ -88,20 +88,20 @@ public class StatsSidebar implements Listener, Stats {
                 else tpsStrings[i] = String.format("<red>%.2f", tps[i]);
             }
 
-            this.lines[0] = Util.getMini("<#11C3D8>Loaded Chunks:");
-            this.lines[1] = Util.getMini("<grey>- <aqua>World: <#78D811>" + this.loadedChunks.get("world"));
-            this.lines[2] = Util.getMini("<grey>- <aqua>Nether: <#D85C11>" + this.loadedChunks.get("world_nether"));
-            this.lines[3] = Util.getMini("<#11C3D8>Average Tick:");
-            this.lines[5] = Util.getMini("<#11C3D8>TPS:");
-            this.lines[6] = Util.getMini("<grey>- " + StringUtils.join(tpsStrings, ", "));
-            this.lines[7] = Util.getMini("<#11C3D8>Entities: <grey>(<#11D875>ticking<grey>/<#11D875>total<grey>)");
-            this.lines[8] = Util.getMini("<grey>- <aqua>All: <#11D875>" + this.entitiesTicking + "<grey>/<#11D875>" + this.entitiesAll);
-            this.lines[9] = Util.getMini("<grey>- <aqua>Mobs: <#11D875>" + this.mobsTicking + "<grey>/<#11D875>" + this.mobsAll);
-            this.lines[10] = Util.getMini("<grey>- <aqua>Enemies: <#11D875>" + this.enemiesTicking + "<grey>/<#11D875>" + this.enemiesAll);
-            this.lines[11] = Util.getMini("<grey>- <aqua>Displays: <#11D875>" + this.displaysTicking + "<grey>/<#11D875>" + this.displaysAll);
-            this.lines[12] = Util.getMini("<grey>- <aqua>Villagers: <#11D875>" + this.villagersTicking + "<grey>/<#11D875>" + this.villagersAll);
-            this.lines[13] = Util.getMini("<grey>- <aqua>Falling: <#11D875>" + this.fallingTicking + "<grey>/<#11D875>" + this.fallingAll);
-            this.lines[14] = Util.getMini("<grey>- <aqua>Drops: <#11D875>" + this.dropsTicking + "<grey>/<#11D875>" + this.dropsAll);
+            this.lines[0] = Utils.getMini("<#11C3D8>Loaded Chunks:");
+            this.lines[1] = Utils.getMini("<grey>- <aqua>World: <#78D811>" + this.loadedChunks.get("world"));
+            this.lines[2] = Utils.getMini("<grey>- <aqua>Nether: <#D85C11>" + this.loadedChunks.get("world_nether"));
+            this.lines[3] = Utils.getMini("<#11C3D8>Average Tick:");
+            this.lines[5] = Utils.getMini("<#11C3D8>TPS:");
+            this.lines[6] = Utils.getMini("<grey>- " + StringUtils.join(tpsStrings, ", "));
+            this.lines[7] = Utils.getMini("<#11C3D8>Entities: <grey>(<#11D875>ticking<grey>/<#11D875>total<grey>)");
+            this.lines[8] = Utils.getMini("<grey>- <aqua>All: <#11D875>" + this.entitiesTicking + "<grey>/<#11D875>" + this.entitiesAll);
+            this.lines[9] = Utils.getMini("<grey>- <aqua>Mobs: <#11D875>" + this.mobsTicking + "<grey>/<#11D875>" + this.mobsAll);
+            this.lines[10] = Utils.getMini("<grey>- <aqua>Enemies: <#11D875>" + this.enemiesTicking + "<grey>/<#11D875>" + this.enemiesAll);
+            this.lines[11] = Utils.getMini("<grey>- <aqua>Displays: <#11D875>" + this.displaysTicking + "<grey>/<#11D875>" + this.displaysAll);
+            this.lines[12] = Utils.getMini("<grey>- <aqua>Villagers: <#11D875>" + this.villagersTicking + "<grey>/<#11D875>" + this.villagersAll);
+            this.lines[13] = Utils.getMini("<grey>- <aqua>Falling: <#11D875>" + this.fallingTicking + "<grey>/<#11D875>" + this.fallingAll);
+            this.lines[14] = Utils.getMini("<grey>- <aqua>Drops: <#11D875>" + this.dropsTicking + "<grey>/<#11D875>" + this.dropsAll);
 
         }, 1, 1);
     }

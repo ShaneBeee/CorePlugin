@@ -2,7 +2,7 @@ package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.command.CustomArguments;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
@@ -67,13 +67,13 @@ public class TagsCommand {
             if (tag.isTagged(material)) keys.add(tag.getKey().toString());
         });
 
-        Util.log("Tags for " + registry.replace("s", "") + " &r'&b" + material.getKey() + "&r'&7:");
-        keys.forEach(key -> Util.log("&7- &r#<#FFF270>" + key));
+        Utils.log("Tags for " + registry.replace("s", "") + " &r'&b" + material.getKey() + "&r'&7:");
+        keys.forEach(key -> Utils.log("&7- &r#<#FFF270>" + key));
     }
 
     private void printTagValues(Tag<Material> tag, String registry) {
-        Util.log(StringUtils.capitalize(registry) + " for tag &r'&b#" + tag.getKey() + "&r'&7:");
-        tag.getValues().forEach(value -> Util.log("&7- &r<#FFF270>" + value.getKey()));
+        Utils.log(StringUtils.capitalize(registry) + " for tag &r'&b#" + tag.getKey() + "&r'&7:");
+        tag.getValues().forEach(value -> Utils.log("&7- &r<#FFF270>" + value.getKey()));
     }
 
 }

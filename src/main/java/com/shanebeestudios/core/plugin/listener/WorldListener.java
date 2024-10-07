@@ -15,7 +15,7 @@ public class WorldListener implements Listener {
             world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 
-            world.setTime(6000); // TODO might not keep this
+            //world.setTime(6000); // TODO might not keep this
             world.setViewDistance(5);
             world.setSimulationDistance(2);
         });

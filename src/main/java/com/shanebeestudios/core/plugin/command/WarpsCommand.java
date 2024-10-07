@@ -3,8 +3,8 @@ package com.shanebeestudios.core.plugin.command;
 import com.shanebeestudios.core.api.registry.Warps;
 import com.shanebeestudios.core.api.registry.Warps.Warp;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.api.util.Util;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.BukkitStringTooltip;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.IStringTooltip;
@@ -111,13 +111,13 @@ public class WarpsCommand {
         int y = location.getBlockY();
         int z = location.getBlockZ();
         String world = location.getWorld().getName();
-        String format = Util.getColString("&7x: &b%s &7y: &b%s &7z: &b%s &7world: &a%s");
+        String format = Utils.getColString("&7x: &b%s &7y: &b%s &7z: &b%s &7world: &a%s");
         return String.format(format, x, y, z, world);
     }
 
     private void send(CommandSender sender, String message, Object... objects) {
         String format = String.format("&7[&bWarps&7] " + message, objects);
-        sender.sendMessage(Util.getColString(format));
+        sender.sendMessage(Utils.getColString(format));
     }
 
 }
