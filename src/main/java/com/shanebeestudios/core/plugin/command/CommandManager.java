@@ -36,6 +36,7 @@ public class CommandManager {
         new TreeCommand();
         new WarpsCommand(this.plugin);
         new WorldCommand();
+        new WorkbenchCommand();
     }
 
 }
