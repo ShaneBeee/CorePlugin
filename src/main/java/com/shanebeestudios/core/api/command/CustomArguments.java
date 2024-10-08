@@ -128,7 +128,7 @@ public class CustomArguments {
             try {
                 return Enum.valueOf(enumClass, info.input().toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException e) {
-                throw CustomArgumentException.fromString("Invalid value: " + info.input());
+                throw CustomArgumentException.fromString("Invalid " + enumClass.getSimpleName() + ": " + info.input());
             }
         }).includeSuggestions(ArgumentSuggestions.strings(
             Arrays.stream(enumClass.getEnumConstants()).map(e -> e.name().toLowerCase(Locale.ROOT)).toList()
