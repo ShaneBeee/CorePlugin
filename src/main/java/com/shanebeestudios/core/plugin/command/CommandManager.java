@@ -25,6 +25,7 @@ public class CommandManager {
         new FixCommand(this.plugin);
         new HealCommand();
         new IgniteCommand();
+        new ModifyItemCommand();
         registerListener(new NoMonstersCommand());
         registerListener(new PathCommand(this.plugin));
         new PrettyNBTCommand();
