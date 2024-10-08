@@ -4,11 +4,13 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.TreeType;
@@ -54,13 +56,26 @@ public class CustomArguments {
      * @return Custom argument for tags
      */
     public static Argument<Tag<Material>> getTagArgument(String name, String registry) {
-        return new CustomArgument<>(new NamespacedKeyArgument(name), info ->
-            Bukkit.getTag(registry, info.currentInput(), Material.class))
-            .includeSuggestions(ArgumentSuggestions.stringCollectionAsync(info ->
-                CompletableFuture.supplyAsync(() ->
-                    ((Collection<Tag<Material>>) Bukkit.getTags(registry, Material.class))
-                        .stream().map(tag -> tag.getKey().toString()).toList())
-            ));
+        return new CustomArgument<>(new GreedyStringArgument(name), info -> {
+            String input = info.input().replace("#", "");
+            NamespacedKey key;
+            try {
+                key = input.contains(":") ? NamespacedKey.fromString(input) : NamespacedKey.minecraft(input);
+            } catch (IllegalArgumentException e) {
+                throw CustomArgumentException.fromString("Invalid key: " + input);
+            }
+            if (key == null) {
+                throw CustomArgumentException.fromString("Invalid key: " + info.input());
+            }
+            Tag<Material> tag = Bukkit.getTag(registry, key, Material.class);
+            if (tag == null) {
+                throw CustomArgumentException.fromString("Invalid tag: " + key);
+            }
+            return tag;
+        }).includeSuggestions(ArgumentSuggestions.stringCollectionAsync(info ->
+            CompletableFuture.supplyAsync(() ->
+                ((Collection<Tag<Material>>) Bukkit.getTags(registry, Material.class)).stream().map(tag -> "#" + tag.getKey()).toList())
+        ));
     }
 
     /**
