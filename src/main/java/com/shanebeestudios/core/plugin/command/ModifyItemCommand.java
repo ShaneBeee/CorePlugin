@@ -32,29 +32,34 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.ShieldMeta;
+import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.inventory.meta.components.ToolComponent;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
-@SuppressWarnings({"deprecation", "UnstableApiUsage"})
+@SuppressWarnings({"deprecation", "UnstableApiUsage", "unchecked"})
 public class ModifyItemCommand {
-
-    private static final String[] OPERATIONS = Arrays.stream(Operation.values()).map(operation -> operation.name().toLowerCase(Locale.ROOT)).toArray(String[]::new);
 
     public ModifyItemCommand() {
         registerCommand();
@@ -64,13 +69,18 @@ public class ModifyItemCommand {
         CommandTree command = new CommandTree("modifyitem")
             .withPermission(Permissions.COMMANDS_MODIFY_ITEM.get())
             .then(attribute())
+            .then(color())
+            .then(damage())
             .then(enchantment())
             .then(food())
-            .then(color())
+            .then(glint())
+            .then(itemFlag())
             .then(lore())
             .then(name())
             .then(potion())
-            .then(tool());
+            .then(stackSize())
+            .then(tool())
+            .then(trim());
         command.register();
     }
 
@@ -79,25 +89,35 @@ public class ModifyItemCommand {
             .then(CustomArguments.getRegistryArgument(Registry.ATTRIBUTE, "attribute")
                 .then(new NamespacedKeyArgument("key")
                     .then(new DoubleArgument("amount")
-                        .then(new MultiLiteralArgument("operation", OPERATIONS)
+                        .then(CustomArguments.getEnumArgument(Operation.class, "operation")
                             .then(CustomArguments.getSlotGroupArgument("slot")
                                 .executesPlayer(info -> {
                                     CommandArguments args = info.args();
                                     Attribute attribute = args.getByClass("attribute", Attribute.class);
                                     NamespacedKey key = args.getByClass("key", NamespacedKey.class);
                                     Double amount = args.getByClass("amount", Double.class);
-                                    String operationString = args.getByClass("operation", String.class);
+                                    Operation operation = args.getByClass("operation", Operation.class);
                                     EquipmentSlotGroup slot = args.getByClass("slot", EquipmentSlotGroup.class);
 
                                     assert attribute != null;
                                     assert key != null;
-                                    assert operationString != null;
+                                    assert operation != null;
                                     assert amount != null;
                                     assert slot != null;
-                                    Operation operation = Operation.valueOf(operationString.toUpperCase(Locale.ROOT));
 
                                     AttributeModifier modifier = new AttributeModifier(key, amount, operation, slot);
-                                    modifyItemStack(info.sender(), (itemMeta, fail) -> itemMeta.addAttributeModifier(attribute, modifier));
+                                    modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                                        if (itemMeta.hasAttributeModifiers()) {
+                                            //noinspection DataFlowIssue
+                                            for (AttributeModifier mod : itemMeta.getAttributeModifiers(attribute)) {
+                                                if (mod.getKey().equals(key)) {
+                                                    fail.set("AttributeModifier with key '" + key + "' already exists");
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                        itemMeta.addAttributeModifier(attribute, modifier);
+                                    });
                                 }))))));
     }
 
@@ -121,9 +141,35 @@ public class ModifyItemCommand {
                                     leatherArmorMeta.setColor(color);
                                 } else if (itemMeta instanceof ShieldMeta shieldMeta) {
                                     shieldMeta.setBaseColor(DyeColor.getByColor(color));
+                                } else if (itemMeta instanceof MapMeta mapMeta) {
+                                    mapMeta.setColor(color);
                                 }
                             });
                         }))));
+    }
+
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> damage() {
+        return LiteralArgument.literal("damage")
+            .then(LiteralArgument.literal("set")
+                .then(new IntegerArgument("value", 0)
+                    .executesPlayer(info -> {
+                        Integer damage = info.args().getByClass("value", Integer.class);
+                        assert damage != null;
+                        modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                            Damageable damageable = (Damageable) itemMeta;
+                            if (damage <= 0) damageable.resetDamage();
+                            else if (damageable.hasMaxDamage()) {
+                                damageable.setDamage(Math.min(damage, damageable.getMaxDamage()));
+                            }
+                        });
+                    })))
+            .then(LiteralArgument.literal("max")
+                .then(new IntegerArgument("value", 0)
+                    .executesPlayer(info -> {
+                        Integer max = info.args().getByClass("value", Integer.class);
+                        assert max != null;
+                        modifyItemStack(info.sender(), (itemMeta, fail) -> ((Damageable) itemMeta).setMaxDamage(max > 0 ? max : null));
+                    })));
     }
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> enchantment() {
@@ -136,7 +182,11 @@ public class ModifyItemCommand {
                         modifyItemStack(info.sender(), (itemMeta, fail) -> {
                             assert enchantment != null;
                             assert level != null;
-                            itemMeta.addEnchant(enchantment, level, true);
+                            if (itemMeta instanceof EnchantmentStorageMeta storageMeta) {
+                                storageMeta.addStoredEnchant(enchantment, level, true);
+                            } else {
+                                itemMeta.addEnchant(enchantment, level, true);
+                            }
                         });
                     })));
     }
@@ -165,6 +215,27 @@ public class ModifyItemCommand {
                                     itemMeta.setFood(food);
                                 });
                             })))));
+    }
+
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> glint() {
+        return LiteralArgument.literal("glint")
+            .then(new MultiLiteralArgument("value", "true", "false", "reset")
+                .executesPlayer(info -> {
+                    String value = info.args().getByClass("value", String.class);
+                    assert value != null;
+                    modifyItemStack(info.sender(), (itemMeta, fail) ->
+                        itemMeta.setEnchantmentGlintOverride(value.equalsIgnoreCase("true") ? Boolean.TRUE : value.equalsIgnoreCase("false") ? Boolean.FALSE : null));
+                }));
+    }
+
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> itemFlag() {
+        return LiteralArgument.literal("itemFlag")
+            .then(CustomArguments.getEnumArgument(ItemFlag.class, "flag")
+                .executesPlayer(info -> {
+                    ItemFlag flag = info.args().getByClass("flag", ItemFlag.class);
+                    assert flag != null;
+                    modifyItemStack(info.sender(), (itemMeta, fail) -> itemMeta.addItemFlags(flag));
+                }));
     }
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> lore() {
@@ -196,11 +267,21 @@ public class ModifyItemCommand {
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> name() {
         return LiteralArgument.literal("name")
-            .then(new GreedyStringArgument("value")
-                .executesPlayer(info -> {
-                    String name = info.args().getByClass("value", String.class);
-                    modifyItemStack(info.sender(), (itemMeta, fail) -> itemMeta.setDisplayName(name));
-                }));
+            .then(new MultiLiteralArgument("type", "item_name", "custom_name")
+                .then(new GreedyStringArgument("value")
+                    .executesPlayer(info -> {
+                        String type = info.args().getByClass("type", String.class);
+                        String name = info.args().getByClass("value", String.class);
+                        assert type != null;
+                        assert name != null;
+                        modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                            if (type.equalsIgnoreCase("item_name")) {
+                                itemMeta.setItemName(Utils.getColString(name));
+                            } else {
+                                itemMeta.setDisplayName(Utils.getColString(name));
+                            }
+                        });
+                    })));
     }
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> potion() {
@@ -252,18 +333,38 @@ public class ModifyItemCommand {
                                 modifyItemStack(info.sender(), (itemMeta, fail) -> {
                                     if (itemMeta instanceof PotionMeta potionMeta) {
                                         potionMeta.addCustomEffect(potionEffect, true);
+                                    } else if (itemMeta instanceof SuspiciousStewMeta stewMeta) {
+                                        stewMeta.addCustomEffect(potionEffect, true);
                                     } else if (itemMeta.hasFood()) {
                                         FoodComponent food = itemMeta.getFood();
                                         food.addEffect(potionEffect, probability.orElse(1f));
                                         itemMeta.setFood(food);
                                     } else {
-                                        fail.set("Item is neither a potion nor a food.");
+                                        fail.set("Item is not a potion, suspicious stew or food");
                                     }
                                 });
                             })))));
     }
 
-    @SuppressWarnings("unchecked")
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> stackSize() {
+        return LiteralArgument.literal("stackSize")
+            .then(new MultiLiteralArgument("type", "set", "max")
+                .then(new IntegerArgument("value", 1, 99)
+                    .executesPlayer(info -> {
+                        String type = info.args().getByClass("type", String.class);
+                        Integer value = info.args().getByClass("value", Integer.class);
+                        assert type != null;
+                        assert value != null;
+
+                        ItemStack item = info.sender().getInventory().getItemInMainHand();
+                        if (type.equalsIgnoreCase("set")) {
+                            item.setAmount(value);
+                        } else {
+                            modifyItemStack(info.sender(), (itemMeta, fail) -> itemMeta.setMaxStackSize(value));
+                        }
+                    })));
+    }
+
     private AbstractArgumentTree<?, Argument<?>, CommandSender> tool() {
         return LiteralArgument.literal("tool")
             .then(LiteralArgument.literal("set")
@@ -332,6 +433,27 @@ public class ModifyItemCommand {
                                         itemMeta.setTool(tool);
                                     });
                                 }))))));
+    }
+
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> trim() {
+        return LiteralArgument.literal("trim")
+            .then(CustomArguments.getRegistryArgument(Registry.TRIM_PATTERN, "pattern")
+                .then(CustomArguments.getRegistryArgument(Registry.TRIM_MATERIAL, "material")
+                    .executesPlayer(info -> {
+                        TrimPattern pattern = info.args().getByClass("pattern", TrimPattern.class);
+                        TrimMaterial material = info.args().getByClass("material", TrimMaterial.class);
+
+                        assert pattern != null;
+                        assert material != null;
+                        modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                            if (itemMeta instanceof ArmorMeta armorMeta) {
+                                ArmorTrim armorTrim = new ArmorTrim(material, pattern);
+                                armorMeta.setTrim(armorTrim);
+                            } else {
+                                fail.set("Item cannot have trim applied");
+                            }
+                        });
+                    })));
     }
 
     private void modifyItemStack(Player player, BiConsumer<ItemMeta, AtomicReference<String>> meta) throws WrapperCommandSyntaxException {
