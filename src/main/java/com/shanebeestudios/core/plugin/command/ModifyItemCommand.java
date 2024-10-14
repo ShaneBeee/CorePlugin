@@ -28,6 +28,7 @@ import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.block.DecoratedPot;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -35,6 +36,7 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -54,6 +56,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -61,8 +64,23 @@ import java.util.function.BiConsumer;
 @SuppressWarnings({"deprecation", "UnstableApiUsage", "unchecked"})
 public class ModifyItemCommand {
 
+    private String[] sherds;
+
     public ModifyItemCommand() {
+        createSherds();
         registerCommand();
+    }
+
+    private void createSherds() {
+        List<String> sherds = new ArrayList<>();
+        for (Material material : Material.values()) {
+            if (material.isLegacy()) continue;
+            if (material != Material.BRICK) continue;
+            if (!Tag.ITEMS_DECORATED_POT_SHERDS.isTagged(material)) continue;
+
+            sherds.add(material.getKey().getKey());
+        }
+        this.sherds = sherds.toArray(new String[0]);
     }
 
     private void registerCommand() {
@@ -78,6 +96,7 @@ public class ModifyItemCommand {
             .then(lore())
             .then(name())
             .then(potion())
+            .then(sherd())
             .then(stackSize())
             .then(tool())
             .then(trim());
@@ -346,6 +365,29 @@ public class ModifyItemCommand {
                             })))));
     }
 
+    private AbstractArgumentTree<?, Argument<?>, CommandSender> sherd() {
+        return LiteralArgument.literal("sherd")
+            .then(new MultiLiteralArgument("side", "back", "front", "left", "right")
+                .then(new MultiLiteralArgument("type", this.sherds)
+                    .executesPlayer(info -> {
+                        String sideString = info.args().getByClass("side", String.class);
+                        String typeString = info.args().getByClass("type", String.class);
+
+                        assert sideString != null;
+                        assert typeString != null;
+                        DecoratedPot.Side side = DecoratedPot.Side.valueOf(sideString.toUpperCase(Locale.ROOT));
+                        Material type = Material.getMaterial(typeString.toUpperCase(Locale.ROOT));
+                        modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                            if (itemMeta instanceof BlockStateMeta blockMeta && blockMeta.getBlockState() instanceof DecoratedPot pot) {
+                                pot.setSherd(side, type);
+                                blockMeta.setBlockState(pot);
+                            } else {
+                                fail.set("Item is not a decorated pot.");
+                            }
+                        });
+                    })));
+    }
+
     private AbstractArgumentTree<?, Argument<?>, CommandSender> stackSize() {
         return LiteralArgument.literal("stackSize")
             .then(new MultiLiteralArgument("type", "set", "max")
@@ -459,7 +501,8 @@ public class ModifyItemCommand {
     private void modifyItemStack(Player player, BiConsumer<ItemMeta, AtomicReference<String>> meta) throws WrapperCommandSyntaxException {
         AtomicReference<String> failure = new AtomicReference<>();
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (item.isEmpty()) throw CommandAPI.failWithString("Invalid item in hand!");
+        if (item.isEmpty())
+            throw CommandAPI.failWithString("Invalid item in hand!");
 
         ItemMeta itemMeta = item.getItemMeta();
         meta.accept(itemMeta, failure);
