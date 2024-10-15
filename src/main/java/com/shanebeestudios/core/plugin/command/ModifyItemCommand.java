@@ -75,8 +75,8 @@ public class ModifyItemCommand {
         List<String> sherds = new ArrayList<>();
         for (Material material : Material.values()) {
             if (material.isLegacy()) continue;
-            if (material != Material.BRICK) continue;
-            if (!Tag.ITEMS_DECORATED_POT_SHERDS.isTagged(material)) continue;
+            if (material != Material.BRICK && !Tag.ITEMS_DECORATED_POT_SHERDS.isTagged(material))
+                continue;
 
             sherds.add(material.getKey().getKey());
         }
