@@ -54,7 +54,7 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("CorePlugin-*.jar")
-            destinationDir = file("/Users/ShaneBee/Desktop/Server/Skript/${serverLocation}/plugins/")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/${serverLocation}/plugins/")
         }
 
     }
