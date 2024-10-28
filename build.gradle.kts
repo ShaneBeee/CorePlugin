@@ -21,9 +21,10 @@ paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.MOJANG_PRODU
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     // Command Api Snapshots
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    maven("https://s01.oss.sonatype.org/content/repositories")
 
     // NBT-API repo
     maven(("https://repo.codemc.io/repository/maven-public/"))
@@ -40,13 +41,13 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.3")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
 
     // NBT-API
     implementation("de.tr7zw:item-nbt-api:2.13.2")
 
     // CoreAPI
-    implementation("com.github.shanebeestudios:coreapi:master-SNAPSHOT")
+    implementation("com.github.shanebeestudios:coreapi:1.0.0")
 }
 
 tasks {
