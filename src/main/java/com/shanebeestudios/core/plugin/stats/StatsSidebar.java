@@ -2,7 +2,7 @@ package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.EntityUtils;
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
@@ -23,7 +23,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +32,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatsSidebar implements Listener, Stats {
 
-    private final CorePlugin plugin;
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
     private final Map<UUID, FastBoard> fastBoards = new HashMap<>();
     private double gradient = -1;
@@ -57,16 +54,20 @@ public class StatsSidebar implements Listener, Stats {
     private int dropsAll = 0;
     private int dropsTicking = 0;
 
-    public StatsSidebar(CorePlugin plugin) {
-        this.plugin = plugin;
+    public StatsSidebar() {
         Bukkit.getWorlds().forEach(world -> this.loadedChunks.put(world.getName(), 0));
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (Permissions.STATS_SIDEBAR.hasPermission(player)) {
+                enable(player);
+            }
+        });
         startLineTimer();
         startEntityTimer();
         startPlayerTimer();
     }
 
     private void startLineTimer() {
-        this.scheduler.runTaskTimerAsynchronously(this.plugin, () -> {
+        TaskUtils.runTaskTimerAsynchronously(() -> {
             this.gradient += 0.025;
             if (this.gradient > 1) this.gradient = -1;
 
@@ -83,8 +84,10 @@ public class StatsSidebar implements Listener, Stats {
             double[] tps = Bukkit.getTPS();
             String[] tpsStrings = new String[tps.length];
             for (int i = 0; i < tps.length; i++) {
-                if (tps[i] > 18) tpsStrings[i] = String.format("<green>%.2f", tps[i]);
-                else if (tps[i] > 15) tpsStrings[i] = String.format("<yellow>%.2f", tps[i]);
+                if (tps[i] > 18)
+                    tpsStrings[i] = String.format("<green>%.2f", tps[i]);
+                else if (tps[i] > 15)
+                    tpsStrings[i] = String.format("<yellow>%.2f", tps[i]);
                 else tpsStrings[i] = String.format("<red>%.2f", tps[i]);
             }
 
@@ -107,9 +110,9 @@ public class StatsSidebar implements Listener, Stats {
     }
 
     private void startEntityTimer() {
-        this.scheduler.runTaskTimer(this.plugin, () -> {
+        TaskUtils.runTaskTimer(() -> {
             List<Entity> entities = EntityUtils.getAllEntities();
-            this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> {
+            TaskUtils.runTaskLaterAsynchronously(() -> {
                 AtomicInteger entitiesTicking = new AtomicInteger();
                 AtomicInteger mobsAll = new AtomicInteger();
                 AtomicInteger mobsTicking = new AtomicInteger();
@@ -134,19 +137,23 @@ public class StatsSidebar implements Listener, Stats {
                     }
                     if (entity instanceof Enemy) {
                         enemiesAll.getAndIncrement();
-                        if (entity.isTicking()) enemiesTicking.getAndIncrement();
+                        if (entity.isTicking())
+                            enemiesTicking.getAndIncrement();
                     }
                     if (entity instanceof Display) {
                         displaysAll.getAndIncrement();
-                        if (entity.isTicking()) displaysTicking.getAndIncrement();
+                        if (entity.isTicking())
+                            displaysTicking.getAndIncrement();
                     }
                     if (entity instanceof Villager) {
                         villagersAll.getAndIncrement();
-                        if (entity.isTicking()) villagersTicking.getAndIncrement();
+                        if (entity.isTicking())
+                            villagersTicking.getAndIncrement();
                     }
                     if (entity instanceof FallingBlock) {
                         fallingAll.getAndIncrement();
-                        if (entity.isTicking()) fallingTicking.getAndIncrement();
+                        if (entity.isTicking())
+                            fallingTicking.getAndIncrement();
                     }
                     if (entity instanceof Item) {
                         dropsAll.getAndIncrement();
@@ -175,7 +182,8 @@ public class StatsSidebar implements Listener, Stats {
     }
 
     private void startPlayerTimer() {
-        this.scheduler.runTaskTimerAsynchronously(this.plugin, () -> {
+        TaskUtils.runTaskTimerAsynchronously(() -> {
+            if (this.title == null) return;
             for (FastBoard fastBoard : this.fastBoards.values()) {
                 fastBoard.updateTitle(this.title);
                 fastBoard.updateLines(this.lines);
@@ -184,7 +192,7 @@ public class StatsSidebar implements Listener, Stats {
     }
 
     private void updateChunks(World world) {
-        this.scheduler.runTaskLater(this.plugin, () -> {
+        TaskUtils.runTaskLater(() -> {
             int length = world.getLoadedChunks().length;
             loadedChunks.put(world.getName(), length);
         }, 1);
@@ -208,6 +216,11 @@ public class StatsSidebar implements Listener, Stats {
         } else {
             enable(player);
         }
+    }
+
+    public void unload() {
+        this.fastBoards.values().forEach(FastBoard::delete);
+        this.fastBoards.clear();
     }
 
     // Listeners

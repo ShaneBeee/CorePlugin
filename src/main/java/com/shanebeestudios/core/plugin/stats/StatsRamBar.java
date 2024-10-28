@@ -1,32 +1,38 @@
 package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class StatsRamBar implements Listener, Stats {
 
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
-    private final BossBar bossbar;
+    private final KeyedBossBar bossbar;
 
-    public StatsRamBar(CorePlugin plugin) {
-        this.bossbar = Bukkit.createBossBar("RamBar", BarColor.BLUE, BarStyle.SEGMENTED_20);
-        startTimer(plugin);
+    public StatsRamBar() {
+        NamespacedKey key = NamespacedKey.fromString("core:rambar");
+        assert key != null;
+        this.bossbar = Bukkit.createBossBar(key, "RamBar", BarColor.BLUE, BarStyle.SEGMENTED_20);
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (Permissions.STATS_RAMBAR.hasPermission(player)) {
+                enable(player);
+            }
+        });
+        startTimer();
     }
 
-    private void startTimer(CorePlugin plugin) {
+    private void startTimer() {
         Runtime runtime = Runtime.getRuntime();
-        this.scheduler.runTaskTimer(plugin, () -> {
+        TaskUtils.runTaskTimer(() -> {
             long max = runtime.maxMemory() / 1024 / 1024;
             long free = runtime.freeMemory() / 1024 / 1024;
             double used = Math.floor(max - free);
@@ -55,6 +61,11 @@ public class StatsRamBar implements Listener, Stats {
         } else {
             enable(player);
         }
+    }
+
+    public void unload() {
+        this.bossbar.removeAll();
+        Bukkit.removeBossBar(this.bossbar.getKey());
     }
 
     // Listeners

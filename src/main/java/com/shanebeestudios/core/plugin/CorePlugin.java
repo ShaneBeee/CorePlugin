@@ -8,10 +8,12 @@ import com.shanebeestudios.core.plugin.listener.ListenerManager;
 import com.shanebeestudios.core.plugin.stats.StatsBiomeBar;
 import com.shanebeestudios.core.plugin.stats.StatsRamBar;
 import com.shanebeestudios.core.plugin.stats.StatsSidebar;
+import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +34,7 @@ public class CorePlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         Utils.setPrefix("&7[&bCore&7] ");
+        TaskUtils.init(this);
         try {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .setNamespace("core")
@@ -63,11 +66,11 @@ public class CorePlugin extends JavaPlugin {
 
     private void registerListeners() {
         // Register stat listeners
-        this.statsSidebar = new StatsSidebar(this);
+        this.statsSidebar = new StatsSidebar();
         registerListener(this.statsSidebar);
-        this.statsBiomebar = new StatsBiomeBar(this);
+        this.statsBiomebar = new StatsBiomeBar();
         registerListener(this.statsBiomebar);
-        this.statsRambar = new StatsRamBar(this);
+        this.statsRambar = new StatsRamBar();
         registerListener(this.statsRambar);
 
         // Register core listeners
@@ -78,6 +81,9 @@ public class CorePlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         Utils.log("Disabling plugin.");
+        Bukkit.getScheduler().cancelTasks(this);
+        this.statsRambar.unload();
+        this.statsSidebar.unload();
         this.registries.disable();
         CommandAPI.onDisable();
     }

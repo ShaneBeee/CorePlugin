@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.Permissions;
-import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +20,21 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class StatsBiomeBar implements Listener, Stats {
 
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
     private final UnsafeValues unsafeValues = Bukkit.getUnsafe();
     private final List<UUID> playerList = new ArrayList<>();
 
-    public StatsBiomeBar(CorePlugin plugin) {
-        startPlayerTimer(plugin);
+    public StatsBiomeBar() {
+        // Add online players to list in case of reload
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (Permissions.STATS_BIOMEBAR.hasPermission(player)) {
+                enable(player);
+            }
+        });
+        startPlayerTimer();
     }
 
-    public void startPlayerTimer(CorePlugin plugin) {
-        this.scheduler.runTaskTimer(plugin, () -> this.playerList.forEach(uuid -> {
+    public void startPlayerTimer() {
+        TaskUtils.runTaskTimer(() -> this.playerList.forEach(uuid -> {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) return;
 
