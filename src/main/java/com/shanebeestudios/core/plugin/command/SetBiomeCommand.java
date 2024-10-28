@@ -3,6 +3,7 @@ package com.shanebeestudios.core.plugin.command;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.WorldUtils;
 import com.shanebeestudios.coreapi.util.Utils;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -43,13 +44,14 @@ public class SetBiomeCommand {
                             Player player = info.sender();
                             Block targetBlock = player.getTargetBlockExact(100);
                             if (targetBlock == null) {
-                                Utils.sendTo(player, "&cTarget too far away!");
-                                return;
+                                throw CommandAPI.failWithString("Target too far away");
                             }
                             Location center = targetBlock.getLocation();
                             Location low = center.clone().subtract(radius, radius, radius);
                             Location high = center.clone().add(radius, radius, radius);
-                            WorldUtils.fillBiome(low, high, biome, replace);
+                            if (!WorldUtils.fillBiome(low, high, biome, replace)) {
+                                throw CommandAPI.failWithString("Invalid biome: " + biome);
+                            }
                         }))));
 
         command.register();

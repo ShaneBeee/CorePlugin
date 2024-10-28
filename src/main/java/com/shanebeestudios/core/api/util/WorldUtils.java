@@ -115,8 +115,9 @@ public class WorldUtils {
      * @param location2  Second corner
      * @param biomeKey   Key of biome
      * @param replaceKey Key of biome to replace
+     * @return True if biome was set, otherwise false
      */
-    public static void fillBiome(@NotNull Location location, @NotNull Location location2, @NotNull NamespacedKey biomeKey, @Nullable NamespacedKey replaceKey) {
+    public static boolean fillBiome(@NotNull Location location, @NotNull Location location2, @NotNull NamespacedKey biomeKey, @Nullable NamespacedKey replaceKey) {
         World world = location.getWorld();
         if (world != location2.getWorld()) {
             throw new IllegalArgumentException("Worlds for both locations do not match!");
@@ -129,7 +130,7 @@ public class WorldUtils {
 
         Holder.Reference<Biome> biome = McUtils.getHolderReference(BIOME_REGISTRY, biomeKey);
         ResourceLocation replaceBiome = replaceKey != null ? McUtils.getResourceLocation(replaceKey) : null;
-        if (biome == null) return;
+        if (biome == null) return false;
 
         List<ChunkAccess> chunkAccessList = new ArrayList<>();
         for (int z = SectionPos.blockToSectionCoord(box.minZ()); z <= SectionPos.blockToSectionCoord(box.maxZ()); ++z) {
@@ -145,6 +146,7 @@ public class WorldUtils {
             chunkAccess.markUnsaved();
         }
         level.getChunkSource().chunkMap.resendBiomesForChunks(chunkAccessList);
+        return true;
     }
 
 }
