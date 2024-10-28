@@ -3,13 +3,13 @@ import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 plugins {
     id("java")
     id("io.github.goooler.shadow") version "8.1.7"
-    id("io.papermc.paperweight.userdev") version "1.7.2" // the latest version can be found on the Gradle Plugin Portal
+    id("io.papermc.paperweight.userdev") version "1.7.4" // the latest version can be found on the Gradle Plugin Portal
 }
 
 // The Minecraft version we're currently building for
-val minecraftVersion = "1.21.1"
+val minecraftVersion = "1.21.3"
 // Where this builds on the server
-val serverLocation = "1-21-1"
+val serverLocation = "1-21-3"
 // Version of CorePlugin
 val projectVersion = "1.0.0"
 
@@ -40,7 +40,7 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.3")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.3")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0")
 
     // NBT-API
     implementation("de.tr7zw:item-nbt-api:2.13.2")
