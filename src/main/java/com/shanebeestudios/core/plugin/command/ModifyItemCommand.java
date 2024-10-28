@@ -230,7 +230,6 @@ public class ModifyItemCommand {
                                     food.setNutrition(nutrition);
                                     food.setSaturation(saturation);
                                     food.setCanAlwaysEat(canAlwaysEat.orElse(false));
-                                    food.setEatSeconds(eatSeconds.orElse(1.6F));
                                     itemMeta.setFood(food);
                                 });
                             })))));
@@ -354,10 +353,6 @@ public class ModifyItemCommand {
                                         potionMeta.addCustomEffect(potionEffect, true);
                                     } else if (itemMeta instanceof SuspiciousStewMeta stewMeta) {
                                         stewMeta.addCustomEffect(potionEffect, true);
-                                    } else if (itemMeta.hasFood()) {
-                                        FoodComponent food = itemMeta.getFood();
-                                        food.addEffect(potionEffect, probability.orElse(1f));
-                                        itemMeta.setFood(food);
                                     } else {
                                         fail.set("Item is not a potion, suspicious stew or food");
                                     }
