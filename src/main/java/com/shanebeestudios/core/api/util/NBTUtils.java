@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Utility methods for NBT
  */
+@SuppressWarnings("deprecation")
 public class NBTUtils {
 
     private NBTUtils() {
@@ -31,7 +32,6 @@ public class NBTUtils {
      * @param itemStack ItemStack to get NBT from
      * @return Full NBT of ItemStack
      */
-    @SuppressWarnings("deprecation")
     public static NBTCompound getFullItem(ItemStack itemStack) {
         return NBTItem.convertItemtoNBT(itemStack);
     }
