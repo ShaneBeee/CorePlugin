@@ -5,12 +5,16 @@ import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.coreapi.util.Utils;
 import de.tr7zw.changeme.nbtapi.NBTBlock;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTEntity;
 import de.tr7zw.changeme.nbtapi.NBTTileEntity;
+import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.jorel.commandapi.BukkitStringTooltip;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.executors.CommandExecutor;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
 import org.bukkit.command.CommandSender;
@@ -33,30 +37,36 @@ public class PrettyNBTCommand {
             BukkitStringTooltip.ofString("entity", "NBT of target entity of player"),
             BukkitStringTooltip.ofString("player", "NBT of player"));
 
-        CommandTree command = new CommandTree("pretty")
-            .withShortDescription("See nbt of different objects.")
-            .withPermission(Permissions.COMMANDS_PRETTY_NBT.get())
-            .then(new StringArgument("type")
-                .includeSuggestions(suggestions)
-                .executesPlayer(info -> {
-                    Player player = info.sender();
-                    String type = info.args().getByClass("type", String.class);
-                    assert type != null;
-                    String pretty = switch (type) {
-                        case "hand" -> getHand(player);
-                        case "vanillahand" -> getVanillaHand(player);
-                        case "block" -> getBlock(player);
-                        case "player" -> getPlayer(player);
-                        case "entity" -> getEntity(player);
-                        default -> null;
-                    };
-                    if (pretty == null) {
-                        Utils.sendTo(player, "NBT for %s is unavailable.", type);
-                        return;
-                    }
-                    Utils.sendTo(player, "NBT for %s sent to console.", type);
-                    Utils.log("NBT for %s:\n%s", type, pretty);
-                }));
+        CommandTree command = new CommandTree("pretty");
+        if (!checkNBT()) {
+            command.executes((CommandExecutor) (sender, args) -> {
+                throw CommandAPI.failWithString("NBT not enabled!");
+            });
+        } else {
+            command.withShortDescription("See nbt of different objects.")
+                .withPermission(Permissions.COMMANDS_PRETTY_NBT.get())
+                .then(new StringArgument("type")
+                    .includeSuggestions(suggestions)
+                    .executesPlayer(info -> {
+                        Player player = info.sender();
+                        String type = info.args().getByClass("type", String.class);
+                        assert type != null;
+                        String pretty = switch (type) {
+                            case "hand" -> getHand(player);
+                            case "vanillahand" -> getVanillaHand(player);
+                            case "block" -> getBlock(player);
+                            case "player" -> getPlayer(player);
+                            case "entity" -> getEntity(player);
+                            default -> null;
+                        };
+                        if (pretty == null) {
+                            Utils.sendTo(player, "NBT for %s is unavailable.", type);
+                            return;
+                        }
+                        Utils.sendTo(player, "NBT for %s sent to console.", type);
+                        Utils.log("NBT for %s:\n%s", type, pretty);
+                    }));
+        }
 
         command.register();
     }
@@ -103,6 +113,17 @@ public class PrettyNBTCommand {
             return NBTUtils.getPrettyNBT(nbtEntity, "  ");
         }
         return null;
+    }
+
+    private boolean checkNBT() {
+        try {
+            NBTContainer nbt = new NBTContainer("{some:string}");
+            nbt.setInteger("someint", 10);
+        } catch (NbtApiException ignore) {
+            Utils.log("&cNBT not enabled!");
+            return false;
+        }
+        return true;
     }
 
 }
