@@ -44,7 +44,7 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.13.2")
+    implementation("de.tr7zw:item-nbt-api:2.13.3-SNAPSHOT")
 
     // CoreAPI
     implementation("com.github.shanebeestudios:coreapi:1.0.0")
