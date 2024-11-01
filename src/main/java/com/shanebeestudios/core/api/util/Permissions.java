@@ -39,6 +39,7 @@ public class Permissions {
     public static final Permissions COMMANDS_WARPS_WARP_OTHER = registerCommand("warps.warp.other");
     public static final Permissions COMMANDS_WARPS_DELETE = registerCommand("warps.delete");
     // Other
+    public static final Permissions COMMANDS_CHUNK_REFRESH = registerCommand("chunksrefresh");
     public static final Permissions COMMANDS_CLEAR_CHAT = registerCommand("chat.clear");
     public static final Permissions COMMANDS_FIX = registerCommand("fix");
     public static final Permissions COMMANDS_HEAL = registerCommand("heal");
