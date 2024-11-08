@@ -35,7 +35,7 @@ public class HealCommand {
 
     @SuppressWarnings("DataFlowIssue")
     private void healPlayer(Player player) {
-        double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         player.setHealth(maxHealth);
         player.setFoodLevel(20);
         player.setFireTicks(0);
