@@ -6,7 +6,6 @@ import com.shanebeestudios.coreapi.util.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.UnsafeValues;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings("deprecation")
 public class StatsBiomeBar implements Listener, Stats {
 
-    private final UnsafeValues unsafeValues = Bukkit.getUnsafe();
     private final List<UUID> playerList = new ArrayList<>();
 
     public StatsBiomeBar() {
@@ -44,10 +41,11 @@ public class StatsBiomeBar implements Listener, Stats {
     }
 
     private String getFormattedBiome(Location location) {
-        String key = this.unsafeValues.getBiomeKey(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()).toString();
+        String key = location.getWorld().getBiome(location).getKey().toString();
         key = key.replace("minecraft:", "<aqua>minecraft<reset>:<yellow>");
         key = key.replace("wythers:", "<green>wythers<reset>:<yellow>");
         key = key.replace("skbee:", "<#FFA533>skbee<reset>:<yellow>");
+        key = key.replace("beer:", "<#1BF89B>beer<reset>:<yellow>");
         key = key.replace("terralith:", "<#D01ED8>terralith<reset>:<yellow>");
         return key;
     }
