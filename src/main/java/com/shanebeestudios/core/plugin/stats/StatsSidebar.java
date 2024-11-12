@@ -21,8 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatsSidebar implements Listener, Stats {
 
+    private final Map<World, String> worldMap = new HashMap<>();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
     private final Map<UUID, FastBoard> fastBoards = new HashMap<>();
     private double gradient = -1;
@@ -55,7 +56,11 @@ public class StatsSidebar implements Listener, Stats {
     private int dropsTicking = 0;
 
     public StatsSidebar() {
-        Bukkit.getWorlds().forEach(world -> this.loadedChunks.put(world.getName(), 0));
+        Bukkit.getWorlds().forEach(world -> {
+            String name = world.getName();
+            this.worldMap.put(world, name);
+            this.loadedChunks.put(name, 0);
+        });
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (Permissions.STATS_SIDEBAR.hasPermission(player)) {
                 enable(player);
@@ -112,6 +117,7 @@ public class StatsSidebar implements Listener, Stats {
     private void startEntityTimer() {
         TaskUtils.runTaskTimer(() -> {
             List<Entity> entities = EntityUtils.getAllEntities();
+            updateChunks();
             TaskUtils.runTaskLaterAsynchronously(() -> {
                 AtomicInteger entitiesTicking = new AtomicInteger();
                 AtomicInteger mobsAll = new AtomicInteger();
@@ -191,11 +197,8 @@ public class StatsSidebar implements Listener, Stats {
         }, 1, 1);
     }
 
-    private void updateChunks(World world) {
-        TaskUtils.runTaskLater(() -> {
-            int length = world.getLoadedChunks().length;
-            loadedChunks.put(world.getName(), length);
-        }, 1);
+    private void updateChunks() {
+        this.worldMap.forEach((world, name) -> this.loadedChunks.put(name, world.getChunkCount()));
     }
 
     public void enable(Player player) {
@@ -225,13 +228,14 @@ public class StatsSidebar implements Listener, Stats {
 
     // Listeners
     @EventHandler
-    private void onChunkLoad(ChunkLoadEvent event) {
-        updateChunks(event.getWorld());
+    private void onWorldLoad(WorldLoadEvent event) {
+        World world = event.getWorld();
+        this.worldMap.put(world, world.getName());
     }
 
     @EventHandler
-    private void onChunkUnload(ChunkUnloadEvent event) {
-        updateChunks(event.getWorld());
+    private void onWorldUnload(WorldUnloadEvent event) {
+        this.worldMap.remove(event.getWorld());
     }
 
     @EventHandler
