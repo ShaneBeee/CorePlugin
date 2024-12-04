@@ -26,6 +26,7 @@ public class CorePlugin extends JavaPlugin {
 
     private static CorePlugin instance;
 
+    private boolean canLoad = false;
     private Registries registries;
     private StatsSidebar statsSidebar;
     private StatsBiomeBar statsBiomebar;
@@ -36,12 +37,16 @@ public class CorePlugin extends JavaPlugin {
         Utils.setPrefix("&7[&bCore&7] ");
         TaskUtils.init(this);
         try {
+            Utils.log("Loading CommandAPI...");
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .setNamespace("core")
                 .verboseOutput(false)
                 .silentLogs(true)
                 .skipReloadDatapacks(true));
-        } catch (UnsupportedVersionException ignore) {
+            canLoad = true;
+            Utils.log("&aLoaded CommandAPI!");
+        } catch (UnsupportedVersionException ex) {
+            Utils.log("&cFailed to load CommandAPI: &7%s", ex.getMessage());
         }
     }
 
@@ -50,11 +55,17 @@ public class CorePlugin extends JavaPlugin {
         long start = System.currentTimeMillis();
         instance = this;
         Utils.log("Enabling plugin.");
-        CommandAPI.onEnable();
 
         this.registries = new Registries(this);
         registerListeners();
-        new CommandManager(this);
+        if (canLoad) {
+            Utils.log("Loading commands...");
+            CommandAPI.onEnable();
+            new CommandManager(this);
+            Utils.log("&aLoaded commands!");
+        } else {
+            Utils.log("&cCannot load commands.");
+        }
 
         long finish = System.currentTimeMillis() - start;
         Utils.log("Finished enabling plugin in &b%s&7ms.", finish);
