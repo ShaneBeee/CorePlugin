@@ -41,10 +41,10 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.3")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.13.3-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.14.1-SNAPSHOT")
 
     // CoreAPI
     implementation("com.github.shanebeestudios:coreapi:1.0.0")
