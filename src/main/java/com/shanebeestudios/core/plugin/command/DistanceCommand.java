@@ -61,9 +61,9 @@ public class DistanceCommand implements Listener {
 
     private int getDistance(Player player, String type) {
         return switch (type) {
-            case "view" -> player.getViewDistance() + 1;
+            case "view" -> player.getViewDistance();
             case "simulation" -> player.getSimulationDistance();
-            case "fakeview" -> this.fakeDistances.getOrDefault(player.getUniqueId(), player.getViewDistance() + 1);
+            case "fakeview" -> this.fakeDistances.getOrDefault(player.getUniqueId(), player.getViewDistance());
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
     }
