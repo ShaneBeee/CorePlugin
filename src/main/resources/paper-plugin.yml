@@ -5,3 +5,8 @@ api-version: '1.21'
 author: ShaneBee
 website: https://github.com/ShaneBeee/CorePlugin
 description: A bunch of core utilities for the server
+dependencies:
+  server:
+    Skript:
+      load: AFTER
+      required: false
