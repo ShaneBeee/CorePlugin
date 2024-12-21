@@ -1,5 +1,6 @@
 package com.shanebeestudios.core.plugin.command;
 
+import com.shanebeestudios.core.api.util.CustomLogger;
 import com.shanebeestudios.core.api.util.NBTUtils;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.coreapi.util.Utils;
@@ -9,6 +10,7 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTEntity;
 import de.tr7zw.changeme.nbtapi.NBTTileEntity;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.BukkitStringTooltip;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
@@ -117,6 +119,7 @@ public class PrettyNBTCommand {
 
     private boolean checkNBT() {
         try {
+            MinecraftVersion.replaceLogger(CustomLogger.getLogger());
             NBTContainer nbt = new NBTContainer("{some:string}");
             nbt.setInteger("someint", 10);
         } catch (NbtApiException ignore) {
