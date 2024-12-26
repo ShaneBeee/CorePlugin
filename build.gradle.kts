@@ -3,7 +3,7 @@ import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 plugins {
     id("java")
     id("io.github.goooler.shadow") version "8.1.7"
-    id("io.papermc.paperweight.userdev") version "1.7.5" // the latest version can be found on the Gradle Plugin Portal
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.8" // the latest version can be found on the Gradle Plugin Portal
 }
 
 // The Minecraft version we're currently building for
