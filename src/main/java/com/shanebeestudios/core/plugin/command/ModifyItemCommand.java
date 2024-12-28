@@ -19,6 +19,7 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -105,7 +106,7 @@ public class ModifyItemCommand {
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> attribute() {
         return LiteralArgument.literal("attributemodifier")
-            .then(CustomArguments.getRegistryArgument(Registry.ATTRIBUTE, "attribute")
+            .then(CustomArguments.getRegistryArgument(RegistryKey.ATTRIBUTE, "attribute")
                 .then(new NamespacedKeyArgument("key")
                     .then(new DoubleArgument("amount")
                         .then(CustomArguments.getEnumArgument(Operation.class, "operation")
@@ -304,7 +305,7 @@ public class ModifyItemCommand {
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> potion() {
         return LiteralArgument.literal("potion")
-            .then(CustomArguments.getRegistryArgument(Registry.POTION_EFFECT_TYPE, "type")
+            .then(CustomArguments.getRegistryArgument(RegistryKey.MOB_EFFECT, "type")
                 .then(LiteralArgument.literal("infinite")
                     .then(getSubPotion()))
                 .then(new IntegerArgument("seconds")
@@ -453,7 +454,7 @@ public class ModifyItemCommand {
                                     });
                                 })))
                         .then(LiteralArgument.literal("tag")
-                            .then(CustomArguments.getTagArgument("value", Tag.REGISTRY_BLOCKS)
+                            .then(CustomArguments.getTagArgument("value", RegistryKey.BLOCK)
                                 .executesPlayer(info -> {
                                     Float speed = info.args().getByClass("speed", Float.class);
                                     Boolean correctForDrops = info.args().getByClass("correct_for_drops", Boolean.class);
@@ -474,8 +475,8 @@ public class ModifyItemCommand {
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> trim() {
         return LiteralArgument.literal("trim")
-            .then(CustomArguments.getRegistryArgument(Registry.TRIM_PATTERN, "pattern")
-                .then(CustomArguments.getRegistryArgument(Registry.TRIM_MATERIAL, "material")
+            .then(CustomArguments.getRegistryArgument(RegistryKey.TRIM_PATTERN, "pattern")
+                .then(CustomArguments.getRegistryArgument(RegistryKey.TRIM_MATERIAL, "material")
                     .executesPlayer(info -> {
                         TrimPattern pattern = info.args().getByClass("pattern", TrimPattern.class);
                         TrimMaterial material = info.args().getByClass("material", TrimMaterial.class);

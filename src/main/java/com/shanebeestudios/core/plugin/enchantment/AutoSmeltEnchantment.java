@@ -1,13 +1,18 @@
 package com.shanebeestudios.core.plugin.enchantment;
 
 import com.shanebeestudios.core.api.registry.Enchantments;
+import com.shanebeestudios.coreapi.util.TagUtils;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.keys.tags.BlockTypeTagKeys;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import io.papermc.paper.registry.tag.Tag;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,15 +20,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"UnstableApiUsage", "NullableProblems"})
 public class AutoSmeltEnchantment implements Listener {
 
     private final Map<Material, Material> smeltingMap = new HashMap<>();
+    private final Tag<BlockType> MINEABLE_PICKAXE_TAG = TagUtils.getTag(BlockTypeTagKeys.MINEABLE_PICKAXE);
+    private final Tag<ItemType> PICKAXES_TAG = TagUtils.getTag(ItemTypeTagKeys.PICKAXES);
 
     public AutoSmeltEnchantment() {
         Bukkit.recipeIterator().forEachRemaining(recipe -> {
@@ -65,8 +74,10 @@ public class AutoSmeltEnchantment implements Listener {
     }
 
     private boolean canAutoSmelt(Block block, ItemStack itemStack) {
-        if (Tag.MINEABLE_PICKAXE.isTagged(block.getType())) {
-            if (Tag.ITEMS_PICKAXES.isTagged(itemStack.getType())) {
+        TypedKey<BlockType> blockKey = TagUtils.getBlockTypedKey(block);
+        TypedKey<ItemType> itemKey = TagUtils.getItemTypedKey(itemStack);
+        if (MINEABLE_PICKAXE_TAG.contains(blockKey)) {
+            if (PICKAXES_TAG.contains(itemKey)) {
                 return itemStack.containsEnchantment(Enchantments.BEER_AUTO_SMELT);
             }
         }

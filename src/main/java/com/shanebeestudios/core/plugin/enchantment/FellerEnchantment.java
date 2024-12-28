@@ -2,10 +2,14 @@ package com.shanebeestudios.core.plugin.enchantment;
 
 import com.shanebeestudios.core.api.registry.Enchantments;
 import com.shanebeestudios.core.plugin.CorePlugin;
+import com.shanebeestudios.coreapi.util.TagUtils;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.keys.tags.BlockTypeTagKeys;
+import io.papermc.paper.registry.tag.Tag;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,10 +18,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+@SuppressWarnings({"UnstableApiUsage", "NullableProblems"})
 public class FellerEnchantment implements Listener {
 
     private final CorePlugin plugin;
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
+    private final Tag<BlockType> LOGS_TAG = TagUtils.getTag(BlockTypeTagKeys.LOGS);
 
     public FellerEnchantment(CorePlugin plugin) {
         this.plugin = plugin;
@@ -26,7 +32,8 @@ public class FellerEnchantment implements Listener {
     @EventHandler
     private void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (!Tag.LOGS.isTagged(block.getType())) return;
+        TypedKey<BlockType> blockKey = TagUtils.getBlockTypedKey(block);
+        if (!LOGS_TAG.contains(blockKey)) return;
 
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
@@ -60,7 +67,8 @@ public class FellerEnchantment implements Listener {
     }
 
     private boolean canFell(Block block, ItemStack handItem, int fellerLevel) {
-        if (!Tag.LOGS.isTagged(block.getType())) return false;
+        TypedKey<BlockType> blockKey = TagUtils.getBlockTypedKey(block);
+        if (!LOGS_TAG.contains(blockKey)) return false;
         if (!(handItem.getItemMeta() instanceof Damageable damageable)) return false;
         if (damageable.hasMaxDamage() && damageable.getDamage() >= damageable.getMaxDamage()) return false;
         return handItem.getEnchantmentLevel(Enchantments.BEER_FELLER) == fellerLevel;
