@@ -37,6 +37,7 @@ public class CommandManager {
         new TagsCommand();
         new TopCommand();
         new TreeCommand();
+        new VehicleCommand();
         new WarpsCommand(this.plugin);
         new WorldCommand();
         new WorkbenchCommand();
