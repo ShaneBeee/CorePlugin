@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatsSidebar implements Listener, Stats {
+
+    private static final Scoreboard DUMMY_BOARD = Bukkit.getScoreboardManager().getNewScoreboard();
 
     private final Map<World, String> worldMap = new HashMap<>();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
@@ -211,6 +214,10 @@ public class StatsSidebar implements Listener, Stats {
         UUID uuid = player.getUniqueId();
         if (!this.fastBoards.containsKey(uuid)) return;
         this.fastBoards.remove(uuid).delete();
+        // This force resends the vanilla scoreboard to the client
+        Scoreboard previous = player.getScoreboard();
+        player.setScoreboard(DUMMY_BOARD);
+        player.setScoreboard(previous);
     }
 
     public void toggle(Player player) {
