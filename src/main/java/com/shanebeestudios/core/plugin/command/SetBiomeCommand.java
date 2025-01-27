@@ -2,7 +2,6 @@ package com.shanebeestudios.core.plugin.command;
 
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.core.api.util.WorldUtils;
-import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
@@ -14,7 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class SetBiomeCommand {
 
@@ -24,8 +23,9 @@ public class SetBiomeCommand {
 
     @SuppressWarnings("DataFlowIssue")
     private void registerCommand() {
-        List<String> biomeList = WorldUtils.getBiomeKeys().stream().map(NamespacedKey::toString).toList();
-        ArgumentSuggestions<CommandSender> suggestions = ArgumentSuggestions.strings(biomeList);
+        ArgumentSuggestions<CommandSender> suggestions = ArgumentSuggestions.stringsAsync(info ->
+            CompletableFuture.supplyAsync(() ->
+                WorldUtils.getBiomeKeys().stream().map(NamespacedKey::toString).toArray(String[]::new)));
 
         CommandTree command = new CommandTree("setbiome")
             .withShortDescription("Sets the biome in a radius around the target block of player.")
