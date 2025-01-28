@@ -17,7 +17,7 @@ public class WorldListener implements Listener {
 
             //world.setTime(6000); // TODO might not keep this
             world.setViewDistance(5);
-            world.setSimulationDistance(2);
+            world.setSimulationDistance(3);
         });
     }
 
