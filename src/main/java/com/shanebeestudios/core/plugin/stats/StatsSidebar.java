@@ -1,12 +1,14 @@
 package com.shanebeestudios.core.plugin.stats;
 
 import com.shanebeestudios.core.api.util.EntityUtils;
+import com.shanebeestudios.core.api.util.Pair;
 import com.shanebeestudios.core.api.util.Permissions;
 import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
@@ -34,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class StatsSidebar implements Listener, Stats {
 
     private static final Scoreboard DUMMY_BOARD = Bukkit.getScoreboardManager().getNewScoreboard();
+    private Pair<String,String> secondWorld = null;
 
     private final Map<World, String> worldMap = new HashMap<>();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
@@ -101,7 +104,12 @@ public class StatsSidebar implements Listener, Stats {
 
             this.lines[0] = Utils.getMini("<#11C3D8>Loaded Chunks:");
             this.lines[1] = Utils.getMini("<grey>- <aqua>World: <#78D811>" + this.loadedChunks.get("world"));
-            this.lines[2] = Utils.getMini("<grey>- <aqua>Nether: <#D85C11>" + this.loadedChunks.get("world_nether"));
+            Pair<String, String> secondWorld = getSecondWorld();
+            if (secondWorld != null) {
+                this.lines[2] = Utils.getMini("<grey>- <aqua>" + secondWorld.getSecond() + ": <#D85C11>" + this.loadedChunks.get(secondWorld.getFirst()));
+            } else {
+                this.lines[2] = Utils.getMini("<grey>- <light_red> NoWorld");
+            }
             this.lines[3] = Utils.getMini("<#11C3D8>Average Tick:");
             this.lines[5] = Utils.getMini("<#11C3D8>TPS:");
             this.lines[6] = Utils.getMini("<grey>- " + StringUtils.join(tpsStrings, ", "));
@@ -254,6 +262,17 @@ public class StatsSidebar implements Listener, Stats {
     @EventHandler
     private void onQuit(PlayerQuitEvent event) {
         disable(event.getPlayer());
+    }
+
+    private Pair<String,String> getSecondWorld() {
+        if (Bukkit.getWorlds().size() == 1) return null;
+
+        if (this.secondWorld == null) {
+            String key = Bukkit.getWorlds().get(1).getName();
+            String name = WordUtils.capitalizeFully(key.replace("world_", "").replace("_", " "));
+            this.secondWorld = new Pair<>(key, name);
+        }
+        return this.secondWorld;
     }
 
 }
