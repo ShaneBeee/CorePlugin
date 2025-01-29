@@ -52,8 +52,7 @@ public class NoMonstersCommand implements Listener {
     @EventHandler
     private void onSpawn(CreatureSpawnEvent event) {
         if (!this.noMonsters) return;
-        SpawnReason reason = event.getSpawnReason();
-        if (reason == SpawnReason.COMMAND || reason == SpawnReason.CUSTOM) return;
+        if (event.getSpawnReason() != SpawnReason.NATURAL) return;
 
 
         LivingEntity entity = event.getEntity();
