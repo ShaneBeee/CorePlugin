@@ -20,10 +20,12 @@ public class CommandManager {
     }
 
     private void registerCommands() {
+        new BiomeSampleCommand();
         new ChunkRefreshCommand();
         new ChunkVisualizeCommand();
         new ClearChatCommand();
         registerListener(new DistanceCommand());
+        new DumpRegistryCommand();
         new FixCommand(this.plugin);
         new HealCommand();
         new IgniteCommand();
