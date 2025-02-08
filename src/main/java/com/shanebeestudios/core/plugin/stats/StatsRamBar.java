@@ -32,7 +32,7 @@ public class StatsRamBar implements Listener, Stats {
 
     private void startTimer() {
         Runtime runtime = Runtime.getRuntime();
-        TaskUtils.runTaskTimer(() -> {
+        TaskUtils.runTaskTimerAsynchronously(() -> {
             long max = runtime.maxMemory() / 1024 / 1024;
             long free = runtime.freeMemory() / 1024 / 1024;
             double used = Math.floor(max - free);

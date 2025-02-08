@@ -5,7 +5,7 @@ import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class StatsBiomeBar implements Listener, Stats {
 
@@ -35,13 +36,17 @@ public class StatsBiomeBar implements Listener, Stats {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) return;
 
-            Component action = Utils.getMini("<grey>Biome: " + getFormattedBiome(player.getLocation()));
-            player.sendActionBar(action);
+            NamespacedKey biomeKey = player.getWorld().getBiome(player.getLocation()).getKey();
+            CompletableFuture.supplyAsync(() -> {
+                Component action = Utils.getMini("<grey>Biome: " + getFormattedBiome(biomeKey));
+                player.sendActionBar(action);
+                return null;
+            });
         }), 5, 5);
     }
 
-    private String getFormattedBiome(Location location) {
-        String key = location.getWorld().getBiome(location).getKey().toString();
+    private String getFormattedBiome(NamespacedKey biomeKey) {
+        String key = biomeKey.toString();
         key = key.replace("minecraft:", "<aqua>minecraft<reset>:<yellow>");
         key = key.replace("wythers:", "<green>wythers<reset>:<yellow>");
         key = key.replace("skbee:", "<#FFA533>skbee<reset>:<yellow>");

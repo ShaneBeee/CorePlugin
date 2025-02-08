@@ -31,12 +31,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatsSidebar implements Listener, Stats {
 
     private static final Scoreboard DUMMY_BOARD = Bukkit.getScoreboardManager().getNewScoreboard();
-    private Pair<String,String> secondWorld = null;
+    private Pair<String, String> secondWorld = null;
 
     private final Map<World, String> worldMap = new HashMap<>();
     private final Map<String, Integer> loadedChunks = new HashMap<>();
@@ -127,9 +128,11 @@ public class StatsSidebar implements Listener, Stats {
 
     private void startEntityTimer() {
         TaskUtils.runTaskTimer(() -> {
+            if (this.fastBoards.isEmpty()) return;
+
             List<Entity> entities = EntityUtils.getAllEntities();
             updateChunks();
-            TaskUtils.runTaskLaterAsynchronously(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 AtomicInteger entitiesTicking = new AtomicInteger();
                 AtomicInteger mobsAll = new AtomicInteger();
                 AtomicInteger mobsTicking = new AtomicInteger();
@@ -192,8 +195,8 @@ public class StatsSidebar implements Listener, Stats {
                 this.fallingTicking = fallingTicking.get();
                 this.dropsAll = dropsAll.get();
                 this.dropsTicking = dropsTicking.get();
-
-            }, 0);
+                return null;
+            });
 
         }, 5, 5);
     }
@@ -264,7 +267,7 @@ public class StatsSidebar implements Listener, Stats {
         disable(event.getPlayer());
     }
 
-    private Pair<String,String> getSecondWorld() {
+    private Pair<String, String> getSecondWorld() {
         if (Bukkit.getWorlds().size() == 1) return null;
 
         if (this.secondWorld == null) {
