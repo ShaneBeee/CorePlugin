@@ -20,7 +20,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatListener implements Listener {
+
+    private static final List<TextReplacementConfig> badWords = new ArrayList<>();
+
+    static {
+        register("bitch", "bench");
+        register("cock", "cork");
+        register("cunt", "cat");
+        register("dick", "dork");
+        register("fuck", "fork");
+        register("shit", "shirt");
+    }
+
+    private static void register(String match, String replacement) {
+        TextReplacementConfig config = TextReplacementConfig.builder().matchLiteral(match).replacement(replacement).build();
+        badWords.add(config);
+    }
 
     @EventHandler
     private void onChat(AsyncChatEvent event) {
@@ -42,6 +61,9 @@ public class ChatListener implements Listener {
         components[1] = getTeamPrefix(player);
         components[2] = Utils.getMini("<aqua>").append(player.displayName()).append(Utils.getMini(" <grey>» <reset>"));
         components[3] = event.message();
+        for (TextReplacementConfig config : badWords) {
+            components[3] = components[3].replaceText(config);
+        }
         Component format = Component.join(JoinConfiguration.noSeparators(), components);
 
         // Item format in message
