@@ -10,7 +10,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 public class NoMonstersCommand implements Listener {
 
@@ -52,8 +51,11 @@ public class NoMonstersCommand implements Listener {
     @EventHandler
     private void onSpawn(CreatureSpawnEvent event) {
         if (!this.noMonsters) return;
-        if (event.getSpawnReason() != SpawnReason.NATURAL) return;
-
+        boolean shouldSpawn = switch (event.getSpawnReason()) {
+            case NATURAL, VILLAGE_INVASION, REINFORCEMENTS -> false;
+            default -> true;
+        };
+        if (shouldSpawn) return;
 
         LivingEntity entity = event.getEntity();
         if (entity instanceof Enemy || entity instanceof Bat) {
