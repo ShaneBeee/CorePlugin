@@ -31,6 +31,7 @@ public class DistanceCommand implements Listener {
         registerDistanceCommand("view");
         registerDistanceCommand("simulation");
         registerDistanceCommand("fakeview");
+        registerDistanceCommand("send");
         this.commandTree.register();
     }
 
@@ -63,6 +64,7 @@ public class DistanceCommand implements Listener {
         return switch (type) {
             case "view" -> player.getViewDistance();
             case "simulation" -> player.getSimulationDistance();
+            case "send" -> player.getSendViewDistance();
             case "fakeview" -> this.fakeDistances.getOrDefault(player.getUniqueId(), player.getViewDistance());
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
@@ -75,6 +77,8 @@ public class DistanceCommand implements Listener {
                 this.fakeDistances.remove(player.getUniqueId());
             } else if (type.equalsIgnoreCase("simulation")) {
                 player.setSimulationDistance(distance);
+            } else if (type.equalsIgnoreCase("send")) {
+                player.setSendViewDistance(distance);
             } else {
                 ClientboundSetChunkCacheRadiusPacket packet = new ClientboundSetChunkCacheRadiusPacket(distance);
                 ((CraftPlayer) player).getHandle().connection.sendPacket(packet);

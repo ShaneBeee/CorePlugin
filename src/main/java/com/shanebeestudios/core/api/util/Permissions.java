@@ -30,6 +30,8 @@ public class Permissions {
     public static final Permissions COMMANDS_VIEW_DISTANCE_OTHER = registerCommand("distance.view.other");
     public static final Permissions COMMANDS_SIM_DISTANCE = registerCommand("distance.simulation");
     public static final Permissions COMMANDS_SIM_DISTANCE_OTHER = registerCommand("distance.simulation.other");
+    public static final Permissions COMMANDS_SEND_DISTANCE = registerCommand("distance.send");
+    public static final Permissions COMMANDS_SEND_DISTANCE_OTHER = registerCommand("distance.send.other");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE = registerCommand("distance.fakeview");
     public static final Permissions COMMANDS_FAKEVIEW_DISTANCE_OTHER = registerCommand("distance.fakeview.other");
     // Warps
