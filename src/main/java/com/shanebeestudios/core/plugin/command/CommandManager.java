@@ -34,6 +34,7 @@ public class CommandManager {
         registerListener(new NoMonstersCommand());
         registerListener(new PathCommand(this.plugin));
         new PrettyNBTCommand();
+        new RandomTeleportCommand();
         new RemoveEntityCommand();
         new RepairCommand();
         new SetBiomeCommand();
