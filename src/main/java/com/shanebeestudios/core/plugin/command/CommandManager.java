@@ -27,6 +27,7 @@ public class CommandManager {
         registerListener(new DistanceCommand());
         new DumpRegistryCommand();
         new FixCommand(this.plugin);
+        new GameruleCommand();
         new HealCommand();
         new IgniteCommand();
         new ModifyItemCommand();
