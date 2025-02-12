@@ -47,7 +47,7 @@ dependencies {
     implementation("de.tr7zw:item-nbt-api:2.14.1")
 
     // CoreAPI
-    implementation("com.github.shanebeestudios:coreapi:1.0.0")
+    implementation("com.github.shanebeestudios:coreapi:1.1.0")
 }
 
 tasks {
