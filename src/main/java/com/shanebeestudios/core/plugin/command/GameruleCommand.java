@@ -25,7 +25,6 @@ public class GameruleCommand {
     }
 
     private void registerCommand() {
-        CommandAPI.unregister("gamerule");
         CommandTree command = new CommandTree("gamerule");
         StringArgument worldArg = createWorldArg();
         for (@NotNull GameRule<?> value : GameRule.values()) {
@@ -37,7 +36,7 @@ public class GameruleCommand {
         }
 
         command.then(worldArg);
-        command.register();
+        command.override();
     }
 
     private StringArgument createWorldArg() {
