@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public class RandomTeleporter {
     private static final int MAX_RETRIES = 10;
 
     private final List<String> teleportingPlayers = new ArrayList<>();
+    private final Random random = new Random();
 
     public RandomTeleporter() {
         ((Logger) LogManager.getRootLogger()).addFilter(new MessageFilter());
@@ -68,12 +70,13 @@ public class RandomTeleporter {
 
     private CompletableFuture<Location> getRandomLocation(World world) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        Random random = new Random();
 
-        int maxDistance = getMaxDistance(world);
-        int x = random.nextInt(maxDistance * 2) - maxDistance;
-        int z = random.nextInt(maxDistance * 2) - maxDistance;
-        Location location = new Location(world, x, 1, z);
+        WorldBorder worldBorder = world.getWorldBorder();
+
+        int maxDistance = (int) worldBorder.getSize() / 2;
+        int x = this.random.nextInt(maxDistance * 2) - maxDistance;
+        int z = this.random.nextInt(maxDistance * 2) - maxDistance;
+        Location location = worldBorder.getCenter().add(x, 0, z);
 
         world.getChunkAtAsync(location).thenAccept(c -> {
             Location safeLocation = getHighestSafeLocation(world, location);
@@ -140,10 +143,6 @@ public class RandomTeleporter {
             return true;
         }
         return false;
-    }
-
-    private int getMaxDistance(World world) {
-        return 1000000;
     }
 
     private int getMaxY(World world) {
