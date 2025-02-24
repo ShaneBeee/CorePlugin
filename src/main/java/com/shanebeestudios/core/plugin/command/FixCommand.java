@@ -12,6 +12,7 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import net.kyori.adventure.util.TriState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -85,12 +86,21 @@ public class FixCommand {
     private void registerLoadCommand() {
         CommandTree command = new CommandTree("loadworld")
             .then(CustomArguments.getWorldArgument("world")
-                .setOptional(true)
-                .executesPlayer(info -> {
-                    Player player = info.sender();
-                    World world = info.args().getByClassOrDefault("world", World.class, player.getWorld());
-                    WorldUtils.copyAndLoadWorld(world);
-                }));
+                .then(new BooleanArgument("decorations")
+                    .setOptional(true)
+                    .executesPlayer(info -> {
+                        Player player = info.sender();
+                        World world = info.args().getByClassOrDefault("world", World.class, player.getWorld());
+                        boolean decorations = info.args().getByClassOrDefault("decorations", Boolean.class, true);
+                        TriState loaded = WorldUtils.copyAndLoadWorld(world, decorations);
+                        if (loaded == TriState.TRUE) {
+                            Utils.sendTo(info.sender(),  "World successfully loaded!");
+                        } else if (loaded == TriState.FALSE){
+                            Utils.sendTo(info.sender(), "World failed to load!");
+                        } else {
+                            Utils.sendTo(info.sender(), "World could already loaded!");
+                        }
+                    })));
 
         command.register();
     }

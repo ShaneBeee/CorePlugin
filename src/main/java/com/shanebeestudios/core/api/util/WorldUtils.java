@@ -21,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * General utility class for {@link World worlds}
@@ -45,16 +47,51 @@ public class WorldUtils {
      *
      * @param world World to copy
      */
-    public static void copyAndLoadWorld(World world) {
+    public static TriState copyAndLoadWorld(World world, boolean includeDecoration) {
         String name = world.getName();
         String cloneName = name + "_copy";
-        World worldCopy = Bukkit.getWorld(name + "_copy");
-        if (worldCopy == null) {
-            WorldCreator worldCreator = new WorldCreator(cloneName);
-            worldCreator.copy(world);
-            worldCreator.keepSpawnLoaded(TriState.FALSE);
-            worldCreator.createWorld();
+        if (Bukkit.getWorld(cloneName) != null) return TriState.NOT_SET;
+
+        Location spawnLocation = world.getSpawnLocation().clone();
+        WorldCreator worldCreator = new WorldCreator(cloneName);
+        worldCreator.copy(world);
+        if (worldCreator.generator() == null) {
+            worldCreator.generator(new ChunkGenerator() {
+                @Override
+                public boolean shouldGenerateNoise() {
+                    return true;
+                }
+
+                @Override
+                public boolean shouldGenerateSurface() {
+                    return true;
+                }
+
+                @Override
+                public boolean shouldGenerateCaves() {
+                    return true;
+                }
+
+                @Override
+                public boolean shouldGenerateDecorations() {
+                    return includeDecoration;
+                }
+
+                @Override
+                public boolean shouldGenerateStructures() {
+                    return includeDecoration;
+                }
+
+                @Override
+                public Location getFixedSpawnLocation(@NotNull World world, @NotNull Random random) {
+                    spawnLocation.setWorld(world);
+                    return spawnLocation;
+                }
+            });
         }
+        worldCreator.keepSpawnLoaded(TriState.FALSE);
+        if (worldCreator.createWorld() != null) return TriState.TRUE;
+        return TriState.FALSE;
     }
 
     /**
