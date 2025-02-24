@@ -73,7 +73,7 @@ public class RandomTeleporter {
 
         WorldBorder worldBorder = world.getWorldBorder();
 
-        int maxDistance = (int) worldBorder.getSize() / 2;
+        int maxDistance = (int) ((worldBorder.getSize()) / 2) - 100;
         int x = this.random.nextInt(maxDistance * 2) - maxDistance;
         int z = this.random.nextInt(maxDistance * 2) - maxDistance;
         Location location = worldBorder.getCenter().add(x, 0, z);
