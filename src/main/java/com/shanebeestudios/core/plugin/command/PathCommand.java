@@ -43,16 +43,16 @@ public class PathCommand implements Listener {
             .then(LiteralArgument.literal("list")
                 .executes((sender, args) -> {
                     if (this.types.isEmpty()) {
-                        Utils.sendTo(sender, "&cCurrently not pathfinding");
+                        Utils.sendMiniTo(sender, "<red>Currently not pathfinding");
                         return;
                     }
-                    String entityTypes = StringUtils.join(this.types.stream().map(entityType -> entityType.getKey().getKey()).sorted().toArray(), "&r, &b");
-                    Utils.sendTo(sender, "&eCurrently pathfinding for &b%s", entityTypes);
+                    String entityTypes = StringUtils.join(this.types.stream().map(entityType -> entityType.getKey().getKey()).sorted().toArray(), "<white>, <aqua>");
+                    Utils.sendMiniTo(sender, "<yellow>Currently pathfinding for <aqua>%s", entityTypes);
                 }))
             .then(LiteralArgument.literal("disable")
                 .executes((sender, args) -> {
                     this.types.clear();
-                    Utils.sendTo(sender, "&cDisabled pathfinding");
+                    Utils.sendMiniTo(sender, "<red>Disabled pathfinding");
                 }))
             .then(LiteralArgument.literal("enable")
                 .then(new EntityTypeArgument("entityType")
@@ -62,17 +62,17 @@ public class PathCommand implements Listener {
 
                         String key = type.getKey().getKey();
                         if (this.types.contains(type)) {
-                            Utils.sendTo(sender, "&6Already pathfinding for &b%s", key);
+                            Utils.sendMiniTo(sender, "<gold>Already pathfinding for <aqua>%s", key);
                             return;
                         }
                         Class<? extends Entity> entityClass = type.getEntityClass();
                         if (entityClass == null || !Mob.class.isAssignableFrom(entityClass)) {
                             // Only mobs can pathfind
-                            Utils.sendTo(sender, "&cInvalid mob type &b%s", key);
+                            Utils.sendMiniTo(sender, "<red>Invalid mob type <aqua>%s", key);
                             return;
                         }
                         this.types.add(type);
-                        Utils.sendTo(sender, "&aEnabled pathfinding for &b%s", key);
+                        Utils.sendMiniTo(sender, "<green>Enabled pathfinding for <aqua>%s", key);
                     })));
 
         command.register();

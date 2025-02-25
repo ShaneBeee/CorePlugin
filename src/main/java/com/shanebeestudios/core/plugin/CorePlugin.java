@@ -34,19 +34,19 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        Utils.setPrefix("&7[&bCore&7] ");
+        Utils.setMiniPrefix("<grey>[<aqua>Core<grey>] ");
         TaskUtils.init(this);
         try {
-            Utils.log("Loading CommandAPI...");
+            Utils.logMini("Loading CommandAPI...");
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .setNamespace("core")
                 .verboseOutput(false)
                 .silentLogs(true)
                 .skipReloadDatapacks(true));
             canLoad = true;
-            Utils.log("&aLoaded CommandAPI!");
+            Utils.logMini("<green>Loaded CommandAPI!");
         } catch (UnsupportedVersionException ex) {
-            Utils.log("&cFailed to load CommandAPI: &7%s", ex.getMessage());
+            Utils.logMini("<red>Failed to load CommandAPI: <grey>%s", ex.getMessage());
         }
     }
 
@@ -54,21 +54,21 @@ public class CorePlugin extends JavaPlugin {
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
-        Utils.log("Enabling plugin.");
+        Utils.logMini("Enabling plugin.");
 
         this.registries = new Registries(this);
         registerListeners();
         if (canLoad) {
-            Utils.log("Loading commands...");
+            Utils.logMini("Loading commands...");
             CommandAPI.onEnable();
             new CommandManager(this);
-            Utils.log("&aLoaded commands!");
+            Utils.logMini("<green>Loaded commands!");
         } else {
-            Utils.log("&cCannot load commands.");
+            Utils.logMini("<red>Cannot load commands.");
         }
 
         long finish = System.currentTimeMillis() - start;
-        Utils.log("Finished enabling plugin in &b%s&7ms.", finish);
+        Utils.logMini("Finished enabling plugin in <aqua>%s<grey>ms.", finish);
     }
 
     private void registerListener(Listener listener) {
@@ -91,7 +91,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Utils.log("Disabling plugin.");
+        Utils.logMini("Disabling plugin.");
         Bukkit.getScheduler().cancelTasks(this);
         this.statsRambar.unload();
         this.statsSidebar.unload();

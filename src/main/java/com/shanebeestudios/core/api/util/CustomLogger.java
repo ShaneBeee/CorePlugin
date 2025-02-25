@@ -21,11 +21,11 @@ public class CustomLogger extends Logger {
 
     @Override
     public void info(String msg) {
-        String prefix = msg.replace("[NBTAPI]", "&7[&bNBT&3API&7]");
+        String prefix = msg.replace("[NBTAPI]", "<grey>[<aqua>NBT<dark_aqua>API<grey>]");
         if (msg.contains("google.gson") || msg.contains("bStats")) {
             return;
         }
-        Utils.log(prefix);
+        Utils.logMini(prefix);
     }
 
 }

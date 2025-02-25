@@ -41,10 +41,10 @@ public class RandomTeleporter {
     }
 
     public void rtp(Player player, World world) {
-        Utils.sendTo(player, "Looking for a suitable location...");
+        Utils.sendMiniTo(player, "Looking for a suitable location...");
         getSafeLocation(world).thenApply(location -> {
             if (location != null) {
-                Utils.sendTo(player, "&aFound a suitable location!");
+                Utils.sendMiniTo(player, "<green>Found a suitable location!");
                 String playerName = player.getName();
                 if (!this.teleportingPlayers.contains(playerName)) {
                     this.teleportingPlayers.add(playerName);
@@ -52,7 +52,7 @@ public class RandomTeleporter {
                 player.teleportAsync(location).thenAccept(a ->
                     TaskUtils.runTaskLater(() -> teleportingPlayers.remove(playerName), 5));
             } else {
-                Utils.sendTo(player, "&cCouldn't find a suitable location!");
+                Utils.sendMiniTo(player, "<red>Couldn't find a suitable location!");
             }
             return null;
         });

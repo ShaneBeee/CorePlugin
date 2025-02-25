@@ -12,6 +12,7 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,10 +43,10 @@ public class WarpsCommand {
                         Player player = info.sender();
                         String key = info.args().getByClass("warp", String.class);
                         if (this.warps.warpExists(key)) {
-                            send(player, "&6Warp already set &r'&c%s&r'", key);
+                            send(player, "<gold>Warp already set <white>'<red>%s<white>'", key);
                         } else {
                             this.warps.addWarp(key, player.getLocation());
-                            send(player, "&6Created new warp &r'&b%s&r'", key);
+                            send(player, "<gold>Created new warp <white>'<aqua>%s<white>'", key);
                         }
 
                     })))
@@ -57,10 +58,10 @@ public class WarpsCommand {
                         Player player = info.sender();
                         String key = info.args().getByClass("warp", String.class);
                         if (!this.warps.warpExists(key)) {
-                            send(player, "&6Unknown warp &r'&c%s&r'", key);
+                            send(player, "<gold>Unknown warp <white>'<red>%s<white>'", key);
                         } else {
                             this.warps.removeWarp(key);
-                            send(player, "&6Deleted warp &r'&b%s&r'", key);
+                            send(player, "<gold>Deleted warp <white>'<aqua>%s<white>'", key);
                         }
                     })))
             .then(LiteralArgument.literal("warp")
@@ -71,7 +72,7 @@ public class WarpsCommand {
                         Player player = info.sender();
                         String key = info.args().getByClass("warp", String.class);
                         if (!this.warps.warpExists(key)) {
-                            send(player, "&6Unknown warp &r'&c%s&r'", key);
+                            send(player, "<gold>Unknown warp <white>'<red>%s<white>'", key);
                         } else {
                             Warp warp = this.warps.getWarp(key);
                             assert warp != null;
@@ -83,7 +84,7 @@ public class WarpsCommand {
                         .executes((sender, args) -> {
                             String key = args.getByClass("warp", String.class);
                             if (!this.warps.warpExists(key)) {
-                                send(sender, "&6Unknown warp &r'&c%s&r'", key);
+                                send(sender, "<gold>Unknown warp <white>'<red>%s<white>'", key);
                             } else {
                                 Warp warp = this.warps.getWarp(key);
                                 assert warp != null;
@@ -99,25 +100,26 @@ public class WarpsCommand {
         return ArgumentSuggestions.stringsWithTooltipsAsync(info -> CompletableFuture.supplyAsync(() -> {
                 List<IStringTooltip> tooltips = new ArrayList<>();
                 this.warps.getAllWarps().forEach((key, warp) ->
-                    tooltips.add(BukkitStringTooltip.ofString(key, prettyLocation(warp))));
+                    tooltips.add(BukkitStringTooltip.ofAdventureComponent(key, prettyLocation(warp))));
                 return tooltips.toArray(new IStringTooltip[0]);
             })
         );
     }
 
-    private String prettyLocation(Warp warp) {
+    private Component prettyLocation(Warp warp) {
         Location location = warp.getLocation();
         int x = location.getBlockX();
         int y = location.getBlockY();
         int z = location.getBlockZ();
         String world = location.getWorld().getName();
-        String format = Utils.getColString("&7x: &b%s &7y: &b%s &7z: &b%s &7world: &a%s");
-        return String.format(format, x, y, z, world);
+        String format = String.format("<grey>x: <aqua>%s <grey>y: <aqua>%s <grey>z: <aqua>%s <grey>world: <green>%s",
+            x, y, z, world);
+        return Utils.getMini(format);
     }
 
     private void send(CommandSender sender, String message, Object... objects) {
-        String format = String.format("&7[&bWarps&7] " + message, objects);
-        sender.sendMessage(Utils.getColString(format));
+        String format = String.format("<grey>[<aqua>Warps<grey>] " + message, objects);
+        sender.sendMessage(Utils.getMini(format));
     }
 
 }

@@ -96,11 +96,11 @@ public class GameruleCommand {
             for (World world : Bukkit.getWorlds()) {
                 world.setGameRule(rule, value);
             }
-            Utils.sendTo(sender, "Set gamerule &r'&e%s&r'&7 for all worlds to &a%s",
+            Utils.sendMiniTo(sender, "Set gamerule <white>'<yellow>%s<white>'<grey> for all worlds to <green>%s",
                 rule.getName(), getColoredValue(value));
         } else {
             Bukkit.getWorld(worldName).setGameRule(rule, value);
-            Utils.sendTo(sender, "Set gamerule &r'&e%s&r'&7 for world &r'&e%s&r'&7 to &a%s",
+            Utils.sendMiniTo(sender, "Set gamerule <white>'<yellow>%s<white>'<grey> for world <white>'<yellow>%s<white>'<grey> to <green>%s",
                 rule.getName(), worldName, getColoredValue(value));
         }
     }
@@ -108,22 +108,22 @@ public class GameruleCommand {
     @SuppressWarnings("DataFlowIssue")
     private void printGamerule(CommandSender sender, String worldName, GameRule<?> rule) {
         if (worldName.equalsIgnoreCase("server")) {
-            Utils.sendTo(sender, "Gamerule values of &r'&e%s&r'&7:", rule.getName());
+            Utils.sendMiniTo(sender, "Gamerule values of <white>'<yellow>%s<white>'<grey>:", rule.getName());
             for (World world : Bukkit.getWorlds()) {
-                Utils.sendTo(sender, "- &r'&e%s&r' &7= %s", world.getName(), getColoredValue(world.getGameRuleValue(rule)));
+                Utils.sendMiniTo(sender, "- <white>'<yellow>%s<white>' <grey>= %s", world.getName(), getColoredValue(world.getGameRuleValue(rule)));
             }
         } else {
             Object gameRuleValue = Bukkit.getWorld(worldName).getGameRuleValue(rule);
-            Utils.sendTo(sender, "Gamerule values of &r'&e%s&r'&7 for world &r'&e%s&r' &7= %s",
+            Utils.sendMiniTo(sender, "Gamerule values of <white>'<yellow>%s<white>'<grey> for world <white>'<yellow>%s<white>' <grey>= %s",
                 rule.getName(), worldName, getColoredValue(gameRuleValue));
         }
     }
 
     private String getColoredValue(Object value) {
         if (value instanceof Boolean bool) {
-            return bool ? "&atrue" : "&cfalse";
+            return bool ? "<green>true" : "<red>false";
         } else if (value instanceof Integer integer) {
-            return "&b" + integer;
+            return "<aqua>" + integer;
         }
         throw new IllegalArgumentException("Invalid gamerule value: " + value);
     }

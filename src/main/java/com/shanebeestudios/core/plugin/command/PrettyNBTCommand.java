@@ -62,11 +62,11 @@ public class PrettyNBTCommand {
                             default -> null;
                         };
                         if (pretty == null) {
-                            Utils.sendTo(player, "NBT for %s is unavailable.", type);
+                            Utils.sendMiniTo(player, "NBT for %s is unavailable.", type);
                             return;
                         }
-                        Utils.sendTo(player, "NBT for %s sent to console.", type);
-                        Utils.log("NBT for %s:\n%s", type, pretty);
+                        Utils.sendMiniTo(player, "NBT for %s sent to console.", type);
+                        Utils.logMini("NBT for %s:\n%s", type, pretty);
                     }));
         }
 
@@ -123,7 +123,7 @@ public class PrettyNBTCommand {
             NBTContainer nbt = new NBTContainer("{some:string}");
             nbt.setInteger("someint", 10);
         } catch (NbtApiException ignore) {
-            Utils.log("&cNBT not enabled!");
+            Utils.logMini("<red>NBT not enabled!");
             return false;
         }
         return true;

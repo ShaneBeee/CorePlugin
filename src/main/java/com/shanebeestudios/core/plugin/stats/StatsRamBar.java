@@ -30,13 +30,14 @@ public class StatsRamBar implements Listener, Stats {
         startTimer();
     }
 
+    @SuppressWarnings("deprecation")
     private void startTimer() {
         Runtime runtime = Runtime.getRuntime();
         TaskUtils.runTaskTimerAsynchronously(() -> {
             long max = runtime.maxMemory() / 1024 / 1024;
             long free = runtime.freeMemory() / 1024 / 1024;
             double used = Math.floor(max - free);
-            String title = String.format("&7Ram: &b%s&7mb / &b%s&7mb", used, max);
+            String title = String.format("<grey>Ram: <aqua>%s<grey>mb / <aqua>%s<grey>mb", used, max);
             this.bossbar.setTitle(Utils.getColString(title));
             double progress = (used / max);
             this.bossbar.setProgress(progress);

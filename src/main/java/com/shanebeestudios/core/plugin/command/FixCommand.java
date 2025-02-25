@@ -94,11 +94,11 @@ public class FixCommand {
                         boolean decorations = info.args().getByClassOrDefault("decorations", Boolean.class, true);
                         TriState loaded = WorldUtils.copyAndLoadWorld(world, decorations);
                         if (loaded == TriState.TRUE) {
-                            Utils.sendTo(info.sender(),  "World successfully loaded!");
-                        } else if (loaded == TriState.FALSE){
-                            Utils.sendTo(info.sender(), "World failed to load!");
+                            Utils.sendMiniTo(info.sender(), "<green>World successfully loaded!");
+                        } else if (loaded == TriState.FALSE) {
+                            Utils.sendMiniTo(info.sender(), "<red>World failed to load!");
                         } else {
-                            Utils.sendTo(info.sender(), "World could already loaded!");
+                            Utils.sendMiniTo(info.sender(), "<yellow>World already loaded!");
                         }
                     })));
 
@@ -141,7 +141,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Utils.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
+            Utils.sendMiniTo(player, "<red>Copy of world <white>'<aqua>%s<white>'<red> is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight();
@@ -202,7 +202,7 @@ public class FixCommand {
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
-            Utils.sendTo(player, "&cCopy of world &r'&b%s&r'&c is not loaded.", worldName);
+            Utils.sendMiniTo(player, "<red>Copy of world <white>'<aqua>%s<white>'<red> is not loaded.", worldName);
             return;
         }
         int min = world.getMinHeight() >> 2;

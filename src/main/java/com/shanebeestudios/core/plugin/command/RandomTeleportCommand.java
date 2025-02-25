@@ -50,8 +50,8 @@ public class RandomTeleportCommand {
     }
 
     private void sendOther(Player player, CommandSender sender, @NotNull World world) {
-        Utils.sendTo(sender, "Teleporting &b%s &7to a random location in &b%s&7.", player.getName(), world.getName());
-        Utils.sendTo(player, "&b%s &7is teleporting you to a random location in &b%s&7.", sender.getName(), world.getName());
+        Utils.sendMiniTo(sender, "Teleporting <aqua>%s <grey>to a random location in <aqua>%s<grey>.", player.getName(), world.getName());
+        Utils.sendMiniTo(player, "<aqua>%s <grey>is teleporting you to a random location in <aqua>%s<grey>.", sender.getName(), world.getName());
     }
 
 }

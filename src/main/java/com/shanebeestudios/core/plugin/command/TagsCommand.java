@@ -77,14 +77,14 @@ public class TagsCommand {
             }
         });
 
-        Utils.log("Tags for " + registryKey.key() + " &r'&b" + keyed.getKey() + "&r'&7:");
-        keys.forEach(key -> Utils.log("&7- &r#<#FFF270>" + key));
+        Utils.logMini("Tags for " + registryKey.key() + " <white>'<aqua>" + keyed.getKey() + "<white>'<grey>:");
+        keys.forEach(key -> Utils.logMini("<grey>- <white>#<#FFF270>" + key));
     }
 
     private <T extends Keyed> void printTagValues(TagKey<T> tagKey, RegistryKey<T> registry) {
-        Utils.log("Values of " + registry.key() + " tag &r'&b#" + tagKey.key() + "&r'&7:");
+        Utils.logMini("Values of " + registry.key() + " tag <white>'<aqua>#" + tagKey.key() + "<white>'<grey>:");
         Tag<?> tag = TagUtils.getTag(tagKey);
-        tag.values().forEach(value -> Utils.log("&7- &r<#FFF270>" + value.key()));
+        tag.values().forEach(value -> Utils.logMini("<grey>- <white><#FFF270>" + value.key()));
     }
 
 }

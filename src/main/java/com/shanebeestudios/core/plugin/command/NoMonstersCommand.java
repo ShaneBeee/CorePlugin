@@ -24,18 +24,18 @@ public class NoMonstersCommand implements Listener {
         CommandTree command = new CommandTree("nomonsters")
             .withShortDescription("Disable monster spawning.")
             .executes((sender, args) -> {
-                String enabled = this.noMonsters ? "&aEnabled" : "&cDisabled";
-                Utils.sendTo(sender, "NoMonsters is currently %s", enabled);
+                String enabled = this.noMonsters ? "<green>Enabled" : "<red>Disabled";
+                Utils.sendMiniTo(sender, "NoMonsters is currently %s", enabled);
             })
             .then(new MultiLiteralArgument("type", "enable", "disable")
                 .executes((sender, args) -> {
                     if (args.getByClass("type", String.class).equalsIgnoreCase("enable")) {
                         this.noMonsters = true;
-                        Utils.sendTo(sender, "NoMonsters is now &aEnabled &7monsters will no longer spawn");
+                        Utils.sendMiniTo(sender, "NoMonsters is now <green>Enabled <grey>monsters will no longer spawn");
                         deleteMonsters();
                     } else {
                         this.noMonsters = false;
-                        Utils.sendTo(sender, "NoMonsters is now &cDisabled &7monsters will now spawn");
+                        Utils.sendMiniTo(sender, "NoMonsters is now <red>Disabled <grey>monsters will now spawn");
                     }
                 }));
 

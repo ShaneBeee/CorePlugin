@@ -20,11 +20,11 @@ import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import io.papermc.paper.registry.RegistryKey;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -62,7 +62,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
-@SuppressWarnings({"deprecation", "UnstableApiUsage", "unchecked"})
+@SuppressWarnings("UnstableApiUsage")
 public class ModifyItemCommand {
 
     private String[] sherds;
@@ -217,23 +217,21 @@ public class ModifyItemCommand {
                 .then(new FloatArgument("saturation")
                     .then(new BooleanArgument("can_always_eat")
                         .setOptional(true)
-                        .then(new FloatArgument("eat_seconds")
-                            .setOptional(true)
-                            .executesPlayer(info -> {
-                                Integer nutrition = info.args().getByClass("nutrition", Integer.class);
-                                Float saturation = info.args().getByClass("saturation", Float.class);
-                                Optional<Boolean> canAlwaysEat = info.args().getOptionalByClass("can_always_eat", Boolean.class);
-                                Optional<Float> eatSeconds = info.args().getOptionalByClass("eat_seconds", Float.class);
-                                assert nutrition != null;
-                                assert saturation != null;
-                                modifyItemStack(info.sender(), (itemMeta, fail) -> {
-                                    FoodComponent food = itemMeta.getFood();
-                                    food.setNutrition(nutrition);
-                                    food.setSaturation(saturation);
-                                    food.setCanAlwaysEat(canAlwaysEat.orElse(false));
-                                    itemMeta.setFood(food);
-                                });
-                            })))));
+                        .executesPlayer(info -> {
+                            CommandArguments args = info.args();
+                            Integer nutrition = args.getByClass("nutrition", Integer.class);
+                            Float saturation = args.getByClass("saturation", Float.class);
+                            Optional<Boolean> canAlwaysEat = args.getOptionalByClass("can_always_eat", Boolean.class);
+                            assert nutrition != null;
+                            assert saturation != null;
+                            modifyItemStack(info.sender(), (itemMeta, fail) -> {
+                                FoodComponent food = itemMeta.getFood();
+                                food.setNutrition(nutrition);
+                                food.setSaturation(saturation);
+                                food.setCanAlwaysEat(canAlwaysEat.orElse(false));
+                                itemMeta.setFood(food);
+                            });
+                        }))));
     }
 
     private AbstractArgumentTree<?, Argument<?>, CommandSender> glint() {
@@ -263,23 +261,24 @@ public class ModifyItemCommand {
                 .then(new GreedyStringArgument("value")
                     .executesPlayer(info -> {
                         String value = info.args().getByClass("value", String.class);
-                        List<String> lore = new ArrayList<>();
+                        List<Component> lore = new ArrayList<>();
                         assert value != null;
                         for (String s : value.split("\\|\\|")) {
-                            lore.add(Utils.getColString(s));
+                            lore.add(Utils.getMini(s));
                         }
-                        modifyItemStack(info.sender(), (itemMeta, fail) -> itemMeta.setLore(lore));
+                        modifyItemStack(info.sender(), (itemMeta, fail) ->
+                            itemMeta.lore(lore));
                     })))
             .then(LiteralArgument.literal("add")
                 .then(new GreedyStringArgument("value")
                     .executesPlayer(info -> {
                         String value = info.args().getByClass("value", String.class);
                         modifyItemStack(info.sender(), (itemMeta, fail) -> {
-                            List<String> list = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
+                            List<Component> list = itemMeta.hasLore() ? itemMeta.lore() : new ArrayList<>();
                             assert list != null;
                             assert value != null;
-                            list.add(Utils.getColString(value));
-                            itemMeta.setLore(list);
+                            list.add(Utils.getMini(value));
+                            itemMeta.lore(list);
                         });
                     })));
     }
@@ -295,9 +294,9 @@ public class ModifyItemCommand {
                         assert name != null;
                         modifyItemStack(info.sender(), (itemMeta, fail) -> {
                             if (type.equalsIgnoreCase("item_name")) {
-                                itemMeta.setItemName(Utils.getColString(name));
+                                itemMeta.itemName(Utils.getMini(name));
                             } else {
-                                itemMeta.setDisplayName(Utils.getColString(name));
+                                itemMeta.displayName(Utils.getMini(name));
                             }
                         });
                     })));
@@ -312,6 +311,7 @@ public class ModifyItemCommand {
                     .then(getSubPotion())));
     }
 
+    @SuppressWarnings("deprecation")
     private AbstractArgumentTree<?, Argument<?>, CommandSender> getSubPotion() {
         return new IntegerArgument("amplifier")
             .setOptional(true)
@@ -440,6 +440,7 @@ public class ModifyItemCommand {
                                 .executesPlayer(info -> {
                                     Float speed = info.args().getByClass("speed", Float.class);
                                     Boolean correctForDrops = info.args().getByClass("correct_for_drops", Boolean.class);
+                                    @SuppressWarnings("unchecked")
                                     List<Material> blocks = (List<Material>) info.args().get("values");
                                     assert blocks != null;
 
@@ -458,7 +459,8 @@ public class ModifyItemCommand {
                                 .executesPlayer(info -> {
                                     Float speed = info.args().getByClass("speed", Float.class);
                                     Boolean correctForDrops = info.args().getByClass("correct_for_drops", Boolean.class);
-                                    Tag<Material> value = info.args().getByClass("value", Tag.class);
+                                    @SuppressWarnings("unchecked")
+                                    Tag<Material> value = info.args().getByClassOrDefault("value", Tag.class, null);
                                     assert value != null;
 
                                     modifyItemStack(info.sender(), (itemMeta, fail) -> {
