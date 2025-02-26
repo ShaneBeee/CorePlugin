@@ -17,6 +17,10 @@ import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.executors.CommandExecutor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
 import org.bukkit.command.CommandSender;
@@ -66,10 +70,12 @@ public class PrettyNBTCommand {
                             return;
                         }
                         Utils.sendMiniTo(player, "NBT for %s sent to console.", type);
-                        Utils.logMini("NBT for %s:\n%s", type, pretty);
+
+                        TextComponent legacyPretty = LegacyComponentSerializer.legacySection().deserialize(pretty);
+                        Component mini = Utils.getMini("NBT for " + type + ":\n");
+                        Bukkit.getConsoleSender().sendMessage(mini.append(legacyPretty));
                     }));
         }
-
         command.register();
     }
 
