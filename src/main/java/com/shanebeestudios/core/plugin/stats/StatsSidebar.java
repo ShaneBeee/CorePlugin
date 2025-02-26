@@ -151,33 +151,37 @@ public class StatsSidebar implements Listener, Stats {
                     if (entity.isTicking()) {
                         entitiesTicking.getAndIncrement();
                     }
-                    if (entity instanceof Mob) {
-                        mobsAll.getAndIncrement();
-                        if (entity.isTicking()) mobsTicking.getAndIncrement();
-                    }
-                    if (entity instanceof Enemy) {
-                        enemiesAll.getAndIncrement();
-                        if (entity.isTicking())
-                            enemiesTicking.getAndIncrement();
-                    }
-                    if (entity instanceof Display) {
-                        displaysAll.getAndIncrement();
-                        if (entity.isTicking())
-                            displaysTicking.getAndIncrement();
-                    }
-                    if (entity instanceof Villager) {
-                        villagersAll.getAndIncrement();
-                        if (entity.isTicking())
-                            villagersTicking.getAndIncrement();
-                    }
-                    if (entity instanceof FallingBlock) {
-                        fallingAll.getAndIncrement();
-                        if (entity.isTicking())
-                            fallingTicking.getAndIncrement();
-                    }
-                    if (entity instanceof Item) {
-                        dropsAll.getAndIncrement();
-                        if (entity.isTicking()) dropsTicking.getAndIncrement();
+                    switch (entity) {
+                        case Enemy ignored -> {
+                            enemiesAll.getAndIncrement();
+                            if (entity.isTicking())
+                                enemiesTicking.getAndIncrement();
+                        }
+                        case Villager ignored -> {
+                            villagersAll.getAndIncrement();
+                            if (entity.isTicking())
+                                villagersTicking.getAndIncrement();
+                        }
+                        case Mob ignored -> {
+                            mobsAll.getAndIncrement();
+                            if (entity.isTicking()) mobsTicking.getAndIncrement();
+                        }
+                        case Display ignored -> {
+                            displaysAll.getAndIncrement();
+                            if (entity.isTicking())
+                                displaysTicking.getAndIncrement();
+                        }
+                        case FallingBlock ignored -> {
+                            fallingAll.getAndIncrement();
+                            if (entity.isTicking())
+                                fallingTicking.getAndIncrement();
+                        }
+                        case Item ignored -> {
+                            dropsAll.getAndIncrement();
+                            if (entity.isTicking()) dropsTicking.getAndIncrement();
+                        }
+                        default -> {
+                        }
                     }
                 });
 
