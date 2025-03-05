@@ -45,6 +45,9 @@ public class CommandManager {
         new VehicleCommand();
         new WarpsCommand(this.plugin);
         new WorldCommand();
+
+        //
+        new TestCommand();
     }
 
 }
