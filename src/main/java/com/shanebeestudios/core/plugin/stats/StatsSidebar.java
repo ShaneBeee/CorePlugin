@@ -109,7 +109,7 @@ public class StatsSidebar implements Listener, Stats {
             if (secondWorld != null) {
                 this.lines[2] = Utils.getMini("<grey>- <aqua>" + secondWorld.getSecond() + ": <#D85C11>" + this.loadedChunks.get(secondWorld.getFirst()));
             } else {
-                this.lines[2] = Utils.getMini("<grey>- <red> NoWorld");
+                this.lines[2] = Utils.getMini("<grey>- <red>NoWorld");
             }
             this.lines[3] = Utils.getMini("<#11C3D8>Average Tick:");
             this.lines[5] = Utils.getMini("<#11C3D8>TPS:");
