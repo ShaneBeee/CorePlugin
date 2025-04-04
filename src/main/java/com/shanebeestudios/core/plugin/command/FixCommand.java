@@ -14,19 +14,17 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import net.kyori.adventure.util.TriState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
-import org.bukkit.block.TileState;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.FallingBlock;
@@ -135,9 +133,10 @@ public class FixCommand {
         });
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private void fixChunks(Player player, int radius, boolean includeTile) {
         World world = player.getWorld();
+        ServerLevel serverLevel = McUtils.getServerLevel(world);
+        RegistryAccess registryAccess = serverLevel.registryAccess();
         String worldName = world.getName();
         World worldCopy = Bukkit.getWorld(worldName + "_copy");
         if (worldCopy == null) {
@@ -166,30 +165,27 @@ public class FixCommand {
                 Chunk chunk = world.getChunkAt(chunkX, chunkZ);
                 worldCopy.getChunkAtAsyncUrgently(chunkX, chunkZ).thenApply(chunkCopy -> {
                     LevelChunk levelChunk = McUtils.getLevelChunk(chunk);
+                    LevelChunk copyLevelChunk = McUtils.getLevelChunk(chunkCopy);
                     for (int x = 0; x <= 15; x++) {
                         for (int z = 0; z <= 15; z++) {
                             for (int y = min; y < 195; y++) {
-                                Block blockCopy = chunkCopy.getBlock(x, y, z);
-                                BlockData data = blockCopy.getBlockData();
                                 BlockPos pos = new BlockPos(x + (chunkX << 4), y, z + (chunkZ << 4));
-                                BlockState state = ((CraftBlockData) data).getState();
+                                BlockState copyState = copyLevelChunk.getBlockState(pos);
                                 // Set the block in an NMS chunk for faster results
-                                levelChunk.setBlockState(pos, state, false, false);
+                                levelChunk.setBlockState(pos, copyState, net.minecraft.world.level.block.Block.UPDATE_ALL);
 
-                                // Copy the TileEntity if one is availabe
-                                if (includeTile && blockCopy.getState() instanceof TileState tileState) {
-                                    Location location = tileState.getLocation();
-                                    location.setWorld(world);
-                                    BlockEntity copy = ((CraftBlockEntityState<?>) tileState.copy(location)).getTileEntity();
-                                    levelChunk.setBlockEntity(copy);
+                                // Copy the TileEntity if one is available
+                                if (includeTile && copyState.hasBlockEntity()) {
+                                    BlockEntity blockEntity = levelChunk.getBlockEntity(pos);
+                                    BlockEntity copyBlockEntity = copyLevelChunk.getBlockEntity(pos);
+                                    assert blockEntity != null;
+                                    assert copyBlockEntity != null;
+                                    CompoundTag compoundTag = copyBlockEntity.saveWithoutMetadata(registryAccess);
+                                    blockEntity.loadWithComponents(compoundTag, registryAccess);
                                 }
                             }
                         }
                     }
-                    // We have to manually update the light after setting blocks
-                    // (not sure if this actually works, the method appears empty)
-                    levelChunk.initializeLightSources();
-                    // Now we have to manually update the chunk to the player
                     world.refreshChunk(chunkX, chunkZ);
                     return null;
                 });
