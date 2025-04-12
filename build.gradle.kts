@@ -7,7 +7,7 @@ plugins {
 }
 
 // The Minecraft version we're currently building for
-val minecraftVersion = "1.21.4"
+val minecraftVersion = "1.21.5"
 // Where this builds on the server
 val serverLocation = "Skript/1-21-5"
 // Version of CorePlugin
@@ -36,8 +36,7 @@ repositories {
 
 dependencies {
     // Paper
-    //paperweight.paperDevBundle("${minecraftVersion}-R0.1-SNAPSHOT")
-    paperweight.paperDevBundle("1.21.5-no-moonrise-SNAPSHOT")
+    paperweight.paperDevBundle("${minecraftVersion}-R0.1-SNAPSHOT")
 
     // FastBoard
     implementation("fr.mrmicky:fastboard:2.1.4")
