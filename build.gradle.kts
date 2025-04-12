@@ -23,8 +23,9 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    // Command Api Snapshots
-    maven("https://s01.oss.sonatype.org/content/repositories")
+    // Command Api
+    //maven("https://s01.oss.sonatype.org/content/repositories") // Regular
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots") // Snapshots
 
     // NBT-API repo
     maven(("https://repo.codemc.io/repository/maven-public/"))
@@ -42,7 +43,7 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.4")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1-SNAPSHOT")
 
     // NBT-API
     implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT")
