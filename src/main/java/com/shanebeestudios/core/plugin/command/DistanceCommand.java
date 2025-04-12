@@ -49,6 +49,8 @@ public class DistanceCommand implements Listener {
                     .executesPlayer((player, args) -> {
                         int distance = args.getUnchecked("distance");
                         setDistance(List.of(player), distance, type);
+                        Component mini = Utils.getMini("<grey>[<aqua>Distance<grey>] <#FF8033>Your " + type + " distance is now <aqua>" + distance);
+                        player.sendMessage(mini);
                     })
                     .then(new EntitySelectorArgument.ManyPlayers("players")
                         .withPermission(Permissions.getCommandPermissions("distance." + type + ".other").get())
@@ -56,6 +58,8 @@ public class DistanceCommand implements Listener {
                             int distance = args.getUnchecked("distance");
                             Collection<Player> players = args.getUnchecked("players");
                             setDistance(players, distance, type);
+                            Component mini = Utils.getMini("<grey>[<aqua>Distance<grey>] <#FF8033>You set " + type + " distance of all players to <aqua>" + distance);
+                            sender.sendMessage(mini);
                         })
                     )));
     }
