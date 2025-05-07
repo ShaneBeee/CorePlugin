@@ -24,8 +24,7 @@ repositories {
     mavenLocal()
 
     // Command Api
-    //maven("https://s01.oss.sonatype.org/content/repositories") // Regular
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots") // Snapshots
+    maven("https://s01.oss.sonatype.org/content/repositories")
 
     // NBT-API repo
     maven(("https://repo.codemc.io/repository/maven-public/"))
@@ -39,16 +38,18 @@ dependencies {
     paperweight.paperDevBundle("${minecraftVersion}-R0.1-SNAPSHOT")
 
     // FastBoard
-    implementation("fr.mrmicky:fastboard:2.1.4")
+    implementation("fr.mrmicky:fastboard:2.1.5")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.15.0")
 
     // CoreAPI
     implementation("com.github.shanebeestudios:coreapi:master-SNAPSHOT")
+
+    compileOnly("commons-lang:commons-lang:2.6")
 }
 
 tasks {
