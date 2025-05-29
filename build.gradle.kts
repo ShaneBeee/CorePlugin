@@ -3,7 +3,7 @@ import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 plugins {
     id("java")
     id("io.github.goooler.shadow") version "8.1.7"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16" // the latest version can be found on the Gradle Plugin Portal
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17" // the latest version can be found on the Gradle Plugin Portal
 }
 
 // The Minecraft version we're currently building for
@@ -83,7 +83,7 @@ tasks {
         relocate("fr.mrmicky.fastboard", "com.shanebeestudios.core.api.fastboard")
         relocate("dev.jorel.commandapi", "com.shanebeestudios.core.api.commandapi")
         relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.core.api.nbt")
-        archiveFileName = "CorePlugin-${projectVersion}.jar"
+        archiveFileName = "CorePlugin-${projectVersion}-${minecraftVersion}.jar"
     }
     jar {
         dependsOn(shadowJar)
