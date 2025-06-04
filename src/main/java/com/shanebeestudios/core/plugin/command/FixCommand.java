@@ -16,10 +16,14 @@ import net.kyori.adventure.util.TriState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter.ScopedCollector;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -181,7 +185,9 @@ public class FixCommand {
                                     assert blockEntity != null;
                                     assert copyBlockEntity != null;
                                     CompoundTag compoundTag = copyBlockEntity.saveWithoutMetadata(registryAccess);
-                                    blockEntity.loadWithComponents(compoundTag, registryAccess);
+                                    ScopedCollector scopedCollector = new ScopedCollector(blockEntity.problemPath(), MinecraftServer.LOGGER);
+                                    ValueInput valueInput = TagValueInput.create(scopedCollector, registryAccess, compoundTag);
+                                    blockEntity.loadWithComponents(valueInput);
                                 }
                             }
                         }

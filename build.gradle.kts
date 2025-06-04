@@ -7,7 +7,7 @@ plugins {
 }
 
 // The Minecraft version we're currently building for
-val minecraftVersion = "1.21.5"
+val minecraftVersion = "1.21.6"
 // Where this builds on the server
 val serverLocation = "Skript/1-21-5"
 // Version of CorePlugin

@@ -41,6 +41,7 @@ public class CorePlugin extends JavaPlugin {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .setNamespace("core")
                 .verboseOutput(false)
+                    .useLatestNMSVersion(true)
                 .silentLogs(true)
                 .skipReloadDatapacks(true));
             canLoad = true;
