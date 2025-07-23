@@ -7,9 +7,9 @@ plugins {
 }
 
 // The Minecraft version we're currently building for
-val minecraftVersion = "1.21.6"
+val minecraftVersion = "1.21.8"
 // Where this builds on the server
-val serverLocation = "Skript/1-21-5"
+val serverLocation = "Skript/1-21-8"
 // Version of CorePlugin
 val projectVersion = "1.0.0"
 
@@ -24,7 +24,7 @@ repositories {
     mavenLocal()
 
     // Command Api
-    maven("https://s01.oss.sonatype.org/content/repositories")
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 
     // NBT-API repo
     maven(("https://repo.codemc.io/repository/maven-public/"))
@@ -41,10 +41,10 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.5")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.1.2")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.0")
+    implementation("de.tr7zw:item-nbt-api:2.15.2-SNAPSHOT")
 
     // CoreAPI
     implementation("com.github.shanebeestudios:coreapi:master-SNAPSHOT")

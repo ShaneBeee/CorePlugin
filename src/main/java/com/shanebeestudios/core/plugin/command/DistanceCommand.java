@@ -85,7 +85,7 @@ public class DistanceCommand implements Listener {
                 player.setSendViewDistance(distance);
             } else {
                 ClientboundSetChunkCacheRadiusPacket packet = new ClientboundSetChunkCacheRadiusPacket(distance);
-                ((CraftPlayer) player).getHandle().connection.sendPacket(packet);
+                ((CraftPlayer) player).getHandle().connection.send(packet);
                 this.fakeDistances.put(player.getUniqueId(), distance);
             }
         });
