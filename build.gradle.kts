@@ -7,9 +7,9 @@ plugins {
 }
 
 // The Minecraft version we're currently building for
-val minecraftVersion = "1.21.8"
+val minecraftVersion = "1.21.11-pre3"
 // Where this builds on the server
-val serverLocation = "Skript/1-21-8"
+val serverLocation = "Skript/1-21-11"
 // Version of CorePlugin
 val projectVersion = "1.0.0"
 
@@ -41,13 +41,13 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.5")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.1.2")
+    implementation("dev.jorel:commandapi-paper-shade:11.0.1-SNAPSHOT")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.2-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.15.3")
 
     // CoreAPI
-    implementation("com.github.shanebeestudios:coreapi:master-SNAPSHOT")
+    implementation("com.github.shanebeestudios:coreapi:1.1.1")
 
     compileOnly("commons-lang:commons-lang:2.6")
 }

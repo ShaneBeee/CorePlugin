@@ -8,7 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -89,7 +89,6 @@ public class WorldUtils {
                 }
             });
         }
-        worldCreator.keepSpawnLoaded(TriState.FALSE);
         if (worldCreator.createWorld() != null) return TriState.TRUE;
         return TriState.FALSE;
     }
@@ -166,7 +165,7 @@ public class WorldUtils {
         ServerLevel level = McUtils.getServerLevel(world);
 
         Holder.Reference<Biome> biome = McUtils.getHolderReference(BIOME_REGISTRY, biomeKey);
-        ResourceLocation replaceBiome = replaceKey != null ? McUtils.getResourceLocation(replaceKey) : null;
+        Identifier replaceBiome = replaceKey != null ? McUtils.getIdentifier(replaceKey) : null;
         if (biome == null) return false;
 
         List<ChunkAccess> chunkAccessList = new ArrayList<>();

@@ -11,7 +11,7 @@ import com.shanebeestudios.core.plugin.stats.StatsSidebar;
 import com.shanebeestudios.coreapi.util.TaskUtils;
 import com.shanebeestudios.coreapi.util.Utils;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -38,12 +38,12 @@ public class CorePlugin extends JavaPlugin {
         TaskUtils.init(this);
         try {
             Utils.logMini("Loading CommandAPI...");
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+            CommandAPI.onLoad(new CommandAPIPaperConfig(this)
                 .setNamespace("core")
                 .verboseOutput(false)
-                    .useLatestNMSVersion(true)
-                .silentLogs(true)
-                .skipReloadDatapacks(true));
+                //.useLatestNMSVersion(true)
+                .silentLogs(true));
+                //.skipReloadDatapacks(true));
             canLoad = true;
             Utils.logMini("<green>Loaded CommandAPI!");
         } catch (UnsupportedVersionException ex) {

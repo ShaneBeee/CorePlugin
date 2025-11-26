@@ -9,9 +9,9 @@ import com.mojang.serialization.JsonOps;
 import com.shanebeestudios.core.plugin.CorePlugin;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biome;
@@ -70,7 +70,7 @@ public class DumpRegistry<N> {
 
     private DumpRegistry(ResourceKey<Registry<N>> registryKey, Codec<N> codec) {
         this.registryKey = registryKey;
-        this.registryPath = registryKey.location().getPath();
+        this.registryPath = registryKey.identifier().getPath();
         this.codec = codec;
     }
 
@@ -80,13 +80,13 @@ public class DumpRegistry<N> {
     public void dumpObjects() {
         Registry<N> registry = MinecraftServer.getServer().registryAccess().lookupOrThrow(registryKey);
         for (N registryValue : registry) {
-            ResourceLocation key = registry.getKey(registryValue);
-            assert key != null;
-            dump(registryValue, key);
+            Identifier identifier = registry.getKey(registryValue);
+            assert identifier != null;
+            dump(registryValue, identifier);
         }
     }
 
-    private void dump(N registryValue, ResourceLocation location) {
+    private void dump(N registryValue, Identifier location) {
         File file = new File(DATA_FOLDER, "data/" + location.getNamespace() + "/" + this.registryPath + "/" + location.getPath() + ".json");
 
         File parent = file.getParentFile();
