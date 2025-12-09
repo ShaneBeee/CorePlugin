@@ -7,7 +7,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import java.util.Random;
+
 public class TreeCommand {
+
+    private final Random random = new Random();
 
     public TreeCommand() {
         registerCommand();
@@ -23,7 +27,7 @@ public class TreeCommand {
                     if (targetBlock == null) return;
 
                     if (targetBlock.isSolid()) targetBlock = targetBlock.getRelative(BlockFace.UP);
-                    player.getWorld().generateTree(targetBlock.getLocation(), type);
+                    player.getWorld().generateTree(targetBlock.getLocation(), this.random, type);
                 }));
 
         command.register();

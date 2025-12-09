@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -30,12 +29,8 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    private void onConnect(PlayerLoginEvent event) {
-        Ranks.joinRank(event.getPlayer());
-    }
-
-    @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) {
+        Ranks.joinRank(event.getPlayer());
         Player player = event.getPlayer();
         Component mini = Utils.getMini("<gray>[<#1BF987>+<gray>] <#1BF9E8>" + player.getName());
         event.joinMessage(mini);

@@ -1,7 +1,7 @@
 package com.shanebeestudios.core.plugin.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +23,8 @@ public class WorldListener implements Listener {
     }
 
     private void worldGamerules(World world) {
-        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        world.setGameRule(GameRules.ADVANCE_TIME, false);
+        world.setGameRule(GameRules.IMMEDIATE_RESPAWN, true);
     }
 
 }
