@@ -44,7 +44,7 @@ dependencies {
     implementation("dev.jorel:commandapi-paper-shade:11.0.1-SNAPSHOT")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.3")
+    implementation("de.tr7zw:item-nbt-api:2.15.5")
 
     // CoreAPI
     implementation("com.github.shanebeestudios:coreapi:1.1.1")
