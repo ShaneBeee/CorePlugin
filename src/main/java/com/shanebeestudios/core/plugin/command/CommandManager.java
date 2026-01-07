@@ -24,6 +24,7 @@ public class CommandManager {
         new ChunkRefreshCommand();
         new ChunkVisualizeCommand();
         new ClearChatCommand();
+        new ColorCommand();
         registerListener(new DistanceCommand());
         new DumpRegistryCommand();
         new FixCommand(this.plugin);
