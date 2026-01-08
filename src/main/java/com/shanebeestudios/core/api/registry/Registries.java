@@ -10,7 +10,6 @@ public class Registries {
     private final Warps warps;
 
     public Registries(CorePlugin plugin) {
-        Enchantments.init();
         Ranks.init();
         this.warps = new Warps(plugin);
     }
