@@ -15,6 +15,8 @@ import org.bukkit.Keyed;
 import org.bukkit.Registry;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -31,21 +33,30 @@ public class TagsCommand {
 
         LiteralArgument tags = LiteralArgument.literal("tags");
         LiteralArgument values = LiteralArgument.literal("values");
-        registerRegistry(tags, values, RegistryKey.BIOME);
-        registerRegistry(tags, values, RegistryKey.BLOCK);
-        registerRegistry(tags, values, RegistryKey.DAMAGE_TYPE);
-        registerRegistry(tags, values, RegistryKey.ENCHANTMENT);
-        registerRegistry(tags, values, RegistryKey.ENTITY_TYPE);
-        registerRegistry(tags, values, RegistryKey.ITEM);
-        registerRegistry(tags, values, RegistryKey.STRUCTURE);
+        LiteralArgument alltags = LiteralArgument.literal("alltags");
+        registerRegistry(tags, values, alltags, RegistryKey.ATTRIBUTE);
+        registerRegistry(tags, values, alltags, RegistryKey.BIOME);
+        registerRegistry(tags, values, alltags, RegistryKey.BLOCK);
+        registerRegistry(tags, values, alltags, RegistryKey.DAMAGE_TYPE);
+        registerRegistry(tags, values, alltags, RegistryKey.DATA_COMPONENT_TYPE);
+        registerRegistry(tags, values, alltags, RegistryKey.DIALOG);
+        registerRegistry(tags, values, alltags, RegistryKey.ENCHANTMENT);
+        registerRegistry(tags, values, alltags, RegistryKey.ENTITY_TYPE);
+        registerRegistry(tags, values, alltags, RegistryKey.GAME_EVENT);
+        registerRegistry(tags, values, alltags, RegistryKey.GAME_RULE);
+        registerRegistry(tags, values, alltags, RegistryKey.ITEM);
+        registerRegistry(tags, values, alltags, RegistryKey.MOB_EFFECT);
+        registerRegistry(tags, values, alltags, RegistryKey.SOUND_EVENT);
+        registerRegistry(tags, values, alltags, RegistryKey.STRUCTURE);
         command.then(tags);
         command.then(values);
+        command.then(alltags);
 
         command.register();
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Keyed> void registerRegistry(LiteralArgument tags, LiteralArgument values, RegistryKey<T> registryKey) {
+    private <T extends Keyed> void registerRegistry(LiteralArgument tags, LiteralArgument values, LiteralArgument alltags, RegistryKey<T> registryKey) {
         String tagsName = registryKey.key().value();
         tags.then(LiteralArgument.literal(tagsName)
             .then(CustomArguments.getRegistryArgument(registryKey, tagsName)
@@ -63,6 +74,25 @@ public class TagsCommand {
                     if (tag == null) return;
                     printTagValues(tag, registryKey);
                 })));
+
+        alltags.then(LiteralArgument.literal(tagsName)
+            .executes(info -> {
+                printAllTags(registryKey);
+            }));
+    }
+
+    private <T extends Keyed> void printAllTags(RegistryKey<T> registryKey) {
+        Registry<T> registry = RegistryAccess.registryAccess().getRegistry(registryKey);
+        Collection<Tag<T>> tags = registry.getTags();
+        if (!tags.isEmpty()) {
+            Utils.logMini("All tags for registry <white>'<aqua>%s<white>'<grey>:", registryKey.key());
+            tags.stream().sorted(Comparator.comparing(tag -> tag.tagKey().key().toString())).forEach(tag -> {
+                Utils.logMini("<grey>- <white>#<#FFF270>%s", tag.tagKey().key());
+            });
+        } else {
+            Utils.logMini("<red>No tags found for registry <white>'<aqua>%s<white>'<grey>", registryKey.key());
+
+        }
     }
 
     @SuppressWarnings("NullableProblems")
