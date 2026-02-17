@@ -57,7 +57,7 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("CorePlugin-*.jar")
-            destinationDir = file("/Users/ShaneBee/Desktop/Server/${serverLocation}/plugins/")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/${serverLocation}/plugins/")
         }
 
     }
