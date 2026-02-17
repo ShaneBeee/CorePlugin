@@ -41,6 +41,7 @@ public class ChatListener implements Listener {
         badWords.add(config);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     private void onChat(AsyncChatEvent event) {
         Component[] components = new Component[4];
@@ -59,7 +60,7 @@ public class ChatListener implements Listener {
         // Format info before message
         Player player = event.getPlayer();
         components[1] = getTeamPrefix(player);
-        components[2] = Utils.getMini("<aqua>").append(player.displayName()).append(Utils.getMini(" <grey>» <reset>"));
+        components[2] = Utils.getMini("<head:" + player.getUniqueId() + "> <aqua>" + player.getDisplayName() + "<grey> » <reset>");
         components[3] = event.message();
         for (TextReplacementConfig config : badWords) {
             components[3] = components[3].replaceText(config);
